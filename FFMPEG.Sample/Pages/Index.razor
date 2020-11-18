@@ -1,7 +1,12 @@
 ﻿@page "/"
+@inject IJSRuntime Runtime
 
-<h1>Hello, world!</h1>
+<button class="btn btn-primary" @onclick="Load">Load</button>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code
+{
+    async void Load()
+    {
+        Ffmpeg.FFMEPG.CreateFFmpeg(Runtime);
+    }
+}
