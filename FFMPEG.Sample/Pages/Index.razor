@@ -1,12 +1,46 @@
 ﻿@page "/"
+@using Ffmpeg;
 @inject IJSRuntime Runtime
+@using System.IO
 
+<Microsoft.AspNetCore.Components.Forms.InputFile OnChange="fileLoad">
+
+</Microsoft.AspNetCore.Components.Forms.InputFile>
 <button class="btn btn-primary" @onclick="Load">Load</button>
+<video width="300" height="200" autoplay controls src="@url"></video>
 
 @code
 {
+    string url;
+    byte[] buffer;
+    async void fileLoad(InputFileChangeEventArgs v)
+    {
+        var file = v.GetMultipleFiles()[0];
+        //file.CreateObjectURL("g.mp4");
+        Stream stream = file.OpenReadStream(100000000);
+        var path = $"{file.Name}";
+        buffer = new byte[file.Size];
+        var format = "video/mp4";
+        await stream.ReadAsync(buffer);
+
+        url = FFmpegFactory.CreateURLFromBuffer(buffer, "myFile.mp4", format);
+        StateHasChanged();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (FFmpegFactory.Runtime == null)
+        {
+            FFmpegFactory.Logger += (m) => Console.WriteLine(m);
+            FFmpegFactory.Progress += (m) => Console.WriteLine($"Progress {m}");
+        }
+        await FFmpegFactory.Init(Runtime);
+    }
     async void Load()
     {
-        Ffmpeg.FFMEPG.CreateFFmpeg(Runtime);
+        var ff = FFmpegFactory.CreateFFmpeg(new FFmpegConfig());
+        await ff.Load();
+        ff.WriteFile("myFile.mp4", buffer);
+        var buff = ff.ReadFile("myFile.mp4");
+        Console.WriteLine("buffer" + buff.Length);
     }
 }
