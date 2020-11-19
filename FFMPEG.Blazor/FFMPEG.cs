@@ -27,13 +27,24 @@ namespace Ffmpeg
         {
             await processReference.InvokeVoidAsync("runFFmpeg", Parameters);
         }
-        public byte[] ReadFile(string path)
+        public async Task<byte[]> ReadFile(string path)
         {
-            return reference.InvokeUnmarshalled<FileConf,byte[]>("readFileFFmpeg",new FileConf() 
+            var res= reference.InvokeUnmarshalled<FileConf,bool>("readFileFFmpeg",new FileConf() 
             {   
                 Hash=Hash,
                 Path=path
             });
+
+            await Task.Delay(1);
+
+            var length = reference.InvokeUnmarshalled < FileConf, int>("readFileLength",new FileConf() { Hash=Hash}
+            );
+            var array = new byte[length];
+
+            reference.InvokeUnmarshalled<FileConf,byte[], object>("readFileProcess", new FileConf() { Hash = Hash },array);
+            await Task.Delay(1);
+            Console.WriteLine("read:" +length) ;
+            return await Task.FromResult(array);
         }
         public void WriteFile(string path, byte[] buffer)
         {

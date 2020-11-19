@@ -40,7 +40,10 @@
         var ff = FFmpegFactory.CreateFFmpeg(new FFmpegConfig());
         await ff.Load();
         ff.WriteFile("myFile.mp4", buffer);
-        var buff = ff.ReadFile("myFile.mp4");
-        Console.WriteLine("buffer" + buff.Length);
+        byte[] buff = await ff.ReadFile("myFile.mp4");
+        Console.WriteLine("Length: "+buff.Length);
+        
+        ///Console.WriteLine(buff == null ? "null" : "not null");
+        //Console.WriteLine("buffer");
     }
 }

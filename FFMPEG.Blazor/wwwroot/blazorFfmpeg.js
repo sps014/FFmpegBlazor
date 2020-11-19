@@ -2,6 +2,7 @@
 // functions, and may import other JavaScript modules if required.
 
 window.ffmpegObjectInstances = new Object();
+window.readFileBuffers = new Object();
 
 window.FfmpegBlazorReference = () => {
     return {
@@ -31,8 +32,20 @@ window.FfmpegBlazorReference = () => {
         },
         readFileFFmpeg: async (obj) => {
             const h = Blazor.platform.readInt32Field(obj, 8);
-            const p = Blazor.platform.readStringField(obj,0);
-            return await ffmpegObjectInstances[h].FS('readFile', p);
+            const p = Blazor.platform.readStringField(obj, 0);
+            readFileBuffers[h] = await ffmpegObjectInstances[h].FS('readFile', p);
+            return true; //Uint8Array array
+        },
+        readFileLength: (obj) => {
+            const h = Blazor.platform.readInt32Field(obj, 8);
+            return readFileBuffers[h].byteLength;
+        },
+        readFileProcess: (obj,buffer)=>
+        {
+            const h = Blazor.platform.readInt32Field(obj, 8);
+            let buff = Blazor.platform.toUint8Array(buffer);
+            buff.set(readFileBuffers[h]);
+            delete readFileBuffers[h];
         },
         writeFileFFmpeg: async (obj, buffer)=>{
             const contentArray = Blazor.platform.toUint8Array(buffer);
@@ -53,7 +66,6 @@ window.FfmpegBlazorReference = () => {
             const contentTypeStr = BINDING.conv_string(type);
 
             const file = new File([contentArray], nameStr, { type: contentTypeStr });
-            console.log(file);
             return BINDING.js_to_mono_obj(URL.createObjectURL(file));
 
         }
