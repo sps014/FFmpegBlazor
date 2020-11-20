@@ -66,13 +66,20 @@ namespace FFmpegBlazor
         {
             reference.InvokeVoid("revokeObjectURLCleanUp", blobURL);
         }
-
+        /// <summary>
+        /// This Method is not intented for External Use
+        /// </summary>
+        /// <param name="message"></param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JSInvokable("logger")]
         public void LoggerCallback(Logs message)
         {
             Logger?.Invoke(message);
         }
+        /// <summary>
+        /// This Method is not intented for External Use
+        /// </summary>
+        /// <param name="p"></param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JSInvokable("progress")]
         public void ProgressCallback(Progress p)

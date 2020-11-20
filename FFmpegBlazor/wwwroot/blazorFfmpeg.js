@@ -8,10 +8,10 @@ window.FfmpegBlazorReference = () => {
     return {
         createFFmpeg: (hash, config, Dotnet) => {
             if (config.corePath == null)
-            ffmpegObjectInstances[hash] = FFmpeg.createFFmpeg({
-                log: config.log,
-                logger: (message) => Dotnet.invokeMethodAsync("logger",message),
-                progress: (p) => Dotnet.invokeMethodAsync("progress",p)
+                ffmpegObjectInstances[hash] = FFmpeg.createFFmpeg({
+                    log: config.log,
+                    logger: (message) => Dotnet.invokeMethodAsync("logger", message),
+                    progress: (p) => Dotnet.invokeMethodAsync("progress", p)
             });
             else
                 ffmpegObjectInstances[hash] = FFmpeg.createFFmpeg({

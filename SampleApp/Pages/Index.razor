@@ -1,60 +1,94 @@
 ﻿@page "/"
 @using FFmpegBlazor
 @inject IJSRuntime Runtime
-@using System.IO
 @using Microsoft.AspNetCore.Components.Forms
 
 
-<InputFile OnChange="fileLoad"/>
-<button class="btn btn-primary" @onclick="Load">Load</button>
-<video width="300" height="200" autoplay controls src="@url"></video>
-<audio controls src="@url2"></audio>
-
-<a class="btn btn-success text-white" href="@url2">Download Mp3</a>
+<InputFile OnChange="fileLoad" /><br /> <br />
+<video width="300" height="200" autoplay controls src="@url" /><br /><br />
+<button class="btn btn-primary" @onclick="Process">Convert Mp3</button><br /><br />
+<audio controls src="@url2" />
 
 @code
 {
     string url; string url2;
-
+    FFMPEG ff;
     byte[] buffer;
-    async void fileLoad(InputFileChangeEventArgs v)
-    {
-        var file = v.GetMultipleFiles()[0];
-        using var stream = file.OpenReadStream(100000000);
-        buffer = new byte[file.Size];
-        await stream.ReadAsync(buffer);
 
-        url = FFmpegFactory.CreateURLFromBuffer(buffer, "myFile.mp4", file.ContentType);
-        StateHasChanged();
-    }
     protected override async Task OnInitializedAsync()
     {
         if (FFmpegFactory.Runtime == null)
         {
-            FFmpegFactory.Logger += (m) => Console.WriteLine(m.Type + " " + m.Message);
-            FFmpegFactory.Progress += async (m) =>
-            {
-                if (m.Ratio == 1)
-                {
-                    var res = await ff.ReadFile("output.mp3");
-                    url2 = FFmpegFactory.CreateURLFromBuffer(res, "output.mp3", "audio/mp3");
-                    //FFmpegFactory.DownloadBufferAsFile(res, "output.mp3", "audio/mp3");
-                    StateHasChanged();
-                }
-                Console.WriteLine($"Progress {m.Ratio}");
-            };
+            FFmpegFactory.Logger += WriteLogs;
+            FFmpegFactory.Progress += ProgressChange;
         }
+
+        //initialize Library
         await FFmpegFactory.Init(Runtime);
     }
-    bool done = false;
-    FFMPEG ff;
-    async void Load()
+
+    async void fileLoad(InputFileChangeEventArgs v)
     {
-        ff = FFmpegFactory.CreateFFmpeg(new FFmpegConfig() { Log = false });
+        //get fist file from input selection
+        var file = v.GetMultipleFiles()[0];
 
-        await ff.Load();
+        //read all bytes
+        using var stream = file.OpenReadStream(100000000); //Max size for file that can be read
+        buffer = new byte[file.Size];
 
+        //read all bytes
+        await stream.ReadAsync(buffer);
+
+        //create a video link from buffer to that video can be played
+        url = FFmpegFactory.CreateURLFromBuffer(buffer, "myFile.mp4", file.ContentType);
+
+        //reRender DOM
+        StateHasChanged();
+    }
+
+    async void Process()
+    {
+        //create an instance
+        ff = FFmpegFactory.CreateFFmpeg();
+
+        //download all dependencies from cdn
+        await ff.Load(); //parameter false means not to trigger events in ffmpeg Clase instance
+
+        if (!ff.IsLoaded) return;
+
+        //write buffer to in-memory files
         ff.WriteFile("myFile.mp4", buffer);
+
+        //Pass CLI argument here equivalent to ffmpeg -i myFile.mp4 output.mp3
         await ff.Run("-i", "myFile.mp4", "output.mp3");
+
+        //delete in-memory file
+        //ff.UnlinkFile("myFile.mp4");
+    }
+
+    async void ProgressChange(Progress m)
+    {
+        Console.WriteLine($"Progress {m.Ratio}");
+
+        if (m.Ratio == 1)
+        {
+            //get bytepointer from c wasm to c#
+            var res = await ff.ReadFile("output.mp3");
+
+
+            //generate a url from file bufferPointer
+            url2 = FFmpegFactory.CreateURLFromBuffer(res, "output.mp3", "audio/mp3");
+
+            //Download the file instantly
+
+            //FFmpegFactory.DownloadBufferAsFile(res, "output.mp3", "audio/mp3");
+
+            StateHasChanged();
+        }
+    }
+
+    void WriteLogs(Logs m)
+    {
+        Console.WriteLine(m.Type + " " + m.Message);
     }
 }
