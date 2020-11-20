@@ -65,7 +65,7 @@ window.FfmpegBlazorReference = () => {
         },
         isLoadedFFmpeg: (h) => {
             return ffmpegObjectInstances[h].isLoaded();
-        }.
+        },
         disposeFFmpeg: (hash) => {
             delete ffmpegObjectInstances[hash];
         },
@@ -76,7 +76,26 @@ window.FfmpegBlazorReference = () => {
 
             const file = new File([contentArray], nameStr, { type: contentTypeStr });
             return BINDING.js_to_mono_obj(URL.createObjectURL(file));
+        },
+        revokeObjectURLCleanUp: (name) => {
+            URL.revokeObjectURL(name);
+        },
+        downloadFile: (data, name, type) => {
+            const contentArray = Blazor.platform.toUint8Array(data);
+            const nameStr = BINDING.conv_string(name);
+            const contentTypeStr = BINDING.conv_string(type);
 
+            const file = new File([contentArray], nameStr, { type: contentTypeStr });
+            const exportUrl = URL.createObjectURL(file);
+
+            const a = document.createElement("a");
+            document.body.appendChild(a);
+            a.href = exportUrl;
+            a.download = nameStr;
+            a.target = "_self";
+            a.click();
+
+            URL.revokeObjectURL(exportUrl);
         }
     };
 }

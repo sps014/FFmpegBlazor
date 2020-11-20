@@ -58,6 +58,15 @@ namespace Ffmpeg
         {
             return reference.InvokeUnmarshalled<byte[], string, string, string>("createObjectURL", buffer, name, type);
         }
+        public static void DownloadBufferAsFile(byte[] buffer, string name, string type)
+        {
+            reference.InvokeUnmarshalled<byte[], string, string, object>("downloadFile", buffer, name, type);
+        }
+        public static void RevokeObjectURL(string blobURL)
+        {
+            reference.InvokeVoid("revokeObjectURLCleanUp",blobURL);
+        }
+        
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JSInvokable("logger")]
         public void LoggerCallback(Logs message)

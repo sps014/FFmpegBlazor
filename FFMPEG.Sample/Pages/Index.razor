@@ -8,10 +8,14 @@
 </Microsoft.AspNetCore.Components.Forms.InputFile>
 <button class="btn btn-primary" @onclick="Load">Load</button>
 <video width="300" height="200" autoplay controls src="@url"></video>
+<audio controls src="@url2"></audio>
+
+<a class="btn btn-success text-white" href="@url2">Download Mp3</a>
 
 @code
 {
-    string url;
+    string url; string url2;
+
     byte[] buffer;
     async void fileLoad(InputFileChangeEventArgs v)
     {
@@ -28,17 +32,30 @@
     {
         if (FFmpegFactory.Runtime == null)
         {
-            FFmpegFactory.Logger += (m) => Console.WriteLine(m.type);
-            FFmpegFactory.Progress += (m) => Console.WriteLine($"Progress {m.ratio}");
+            FFmpegFactory.Logger += (m) => Console.WriteLine(m.type+"   "+m.message);
+            FFmpegFactory.Progress += async(m) =>
+            {
+                if(m.ratio==1)
+                {
+                    var res=await ff.ReadFile("output.mp3");
+                    url2=FFmpegFactory.CreateURLFromBuffer(res, "output.mp3", "audio/mp3");
+                    FFmpegFactory.DownloadBufferAsFile(res, "output.mp3", "audio/mp3");
+                    StateHasChanged();
+                }
+                Console.WriteLine($"Progress {m.ratio}");
+            };
         }
         await FFmpegFactory.Init(Runtime);
     }
+    bool done = false;
+    FFMPEG ff;
     async void Load()
     {
-        var ff = FFmpegFactory.CreateFFmpeg(new FFmpegConfig() { Log = false });
+        ff = FFmpegFactory.CreateFFmpeg(new FFmpegConfig() { Log = false });
         await ff.Load();
         ff.WriteFile("myFile.mp4", buffer);
-        await ff.Run("-i","myFile.mp4","-s", "1920x1080","output.avi");
+        await ff.Run("-i","myFile.mp4","output.mp3");
+
         //  await ffmpeg.run('-i', 'flame.avi', '-s', '1920x1080', 'output.mp4');
 
         ///Console.WriteLine(buff == null ? "null" : "not null");
