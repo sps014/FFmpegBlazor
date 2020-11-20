@@ -69,6 +69,10 @@ namespace Ffmpeg
         {
             return await reference.InvokeAsync<T>("fsFFmpeg", method,args);
         }
+        internal bool IsLoadedFFmpeg()
+        {
+            return reference.Invoke<bool>("isLoadedFFmpeg",Hash);
+        }
         ~FFMPEG()
         {
             processReference.InvokeVoid("disposeFFmpeg", Hash);

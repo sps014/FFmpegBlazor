@@ -63,6 +63,9 @@ window.FfmpegBlazorReference = () => {
         dispose: function () {
             DotNet.disposeJSObjectReference(this);
         },
+        isLoadedFFmpeg: (h) => {
+            return ffmpegObjectInstances[h].isLoaded();
+        }.
         disposeFFmpeg: (hash) => {
             delete ffmpegObjectInstances[hash];
         },

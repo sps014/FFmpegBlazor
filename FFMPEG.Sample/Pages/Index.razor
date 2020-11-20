@@ -16,14 +16,12 @@
     async void fileLoad(InputFileChangeEventArgs v)
     {
         var file = v.GetMultipleFiles()[0];
-        //file.CreateObjectURL("g.mp4");
         Stream stream = file.OpenReadStream(100000000);
-        var path = $"{file.Name}";
         buffer = new byte[file.Size];
-        var format = "video/mp4";
+        Console.WriteLine(file.ContentType);
         await stream.ReadAsync(buffer);
 
-        url = FFmpegFactory.CreateURLFromBuffer(buffer, "myFile.mp4", format);
+        url = FFmpegFactory.CreateURLFromBuffer(buffer, "myFile.mp4", file.ContentType);
         StateHasChanged();
     }
     protected override async Task OnInitializedAsync()
