@@ -30,19 +30,19 @@
     {
         if (FFmpegFactory.Runtime == null)
         {
-            FFmpegFactory.Logger += (m) => Console.WriteLine(m);
-            FFmpegFactory.Progress += (m) => Console.WriteLine($"Progress {m}");
+            FFmpegFactory.Logger += (m) => Console.WriteLine(m.type);
+            FFmpegFactory.Progress += (m) => Console.WriteLine($"Progress {m.ratio}");
         }
         await FFmpegFactory.Init(Runtime);
     }
     async void Load()
     {
-        var ff = FFmpegFactory.CreateFFmpeg(new FFmpegConfig());
+        var ff = FFmpegFactory.CreateFFmpeg(new FFmpegConfig() { Log = false });
         await ff.Load();
         ff.WriteFile("myFile.mp4", buffer);
-        byte[] buff = await ff.ReadFile("myFile.mp4");
-        Console.WriteLine("Length: "+buff.Length);
-        
+        await ff.Run("-i","myFile.mp4","-s", "1920x1080","output.avi");
+        //  await ffmpeg.run('-i', 'flame.avi', '-s', '1920x1080', 'output.mp4');
+
         ///Console.WriteLine(buff == null ? "null" : "not null");
         //Console.WriteLine("buffer");
     }

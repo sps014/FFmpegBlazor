@@ -10,8 +10,8 @@ window.FfmpegBlazorReference = () => {
             if (config.corePath == null)
             ffmpegObjectInstances[hash] = FFmpeg.createFFmpeg({
                 log: config.log,
-                logger: ({ message }) => Dotnet.invokeMethodAsync("logger", message),
-                progress: (p) => Dotnet.invokeMethodAsync("progress", p)
+                logger: (message) => Dotnet.invokeMethodAsync("logger",message),
+                progress: (p) => Dotnet.invokeMethodAsync("progress",p)
             });
             else
                 ffmpegObjectInstances[hash] = FFmpeg.createFFmpeg({
@@ -53,6 +53,12 @@ window.FfmpegBlazorReference = () => {
             const p = Blazor.platform.readStringField(obj, 0);
             await ffmpegObjectInstances[h].FS("writeFile", p, contentArray);
 
+        },
+        unlinkFileFFmpeg: async (h, p) => {
+            await ffmpegObjectInstances[h].FS('unlink', p);
+        },
+        fsFFmpeg: async (h, method, args) => {
+            return await ffmpegObjectInstances[h].FS(method, ...args);
         },
         dispose: function () {
             DotNet.disposeJSObjectReference(this);

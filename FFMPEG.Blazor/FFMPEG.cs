@@ -25,7 +25,7 @@ namespace Ffmpeg
         }
         public async Task Run(params string[] Parameters)
         {
-            await processReference.InvokeVoidAsync("runFFmpeg", Parameters);
+            await processReference.InvokeVoidAsync("runFFmpeg",Hash, Parameters);
         }
         public async Task<byte[]> ReadFile(string path)
         {
@@ -53,6 +53,21 @@ namespace Ffmpeg
                 Hash = Hash,
                 Path=path
             },buffer);
+        }
+        public void UnlinkFile(string path)
+        {
+            reference.InvokeVoid("unlinkFileFFmpeg",Hash, path);
+        }
+        /// <summary>
+        /// Use ReadFile and WriteFile , Unlink file , for other command use this directly.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="method"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public async Task<T> FS<T>(string method, params object[] args)
+        {
+            return await reference.InvokeAsync<T>("fsFFmpeg", method,args);
         }
         ~FFMPEG()
         {

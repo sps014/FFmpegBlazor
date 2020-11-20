@@ -36,8 +36,10 @@ namespace Ffmpeg
                 .InvokeAsync<IJSInProcessObjectReference>("FfmpegBlazorReference");
         }
 
-        public static FFMPEG CreateFFmpeg(FFmpegConfig config=new FFmpegConfig())
+        public static FFMPEG CreateFFmpeg(FFmpegConfig config=null)
         {
+            if (config == null)
+                config = new FFmpegConfig();
             
             processReference.InvokeVoid("createFFmpeg",FFMPEG.HashCount,config,dotNetObjectReference);
 
@@ -58,25 +60,34 @@ namespace Ffmpeg
         }
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JSInvokable("logger")]
-        public void LoggerCallback(string message)
+        public void LoggerCallback(Logs message)
         {
             Logger?.Invoke(message);
         }
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JSInvokable("progress")]
-        public void ProgressCallback(string p)
+        public void ProgressCallback(Progress p)
         {
             Progress?.Invoke(p);
         }
-        public delegate void LoggerHandler(string message);
+        public delegate void LoggerHandler(Logs log);
         public static event LoggerHandler Logger;
-        public delegate void ProgressHandler(string message);
+        public delegate void ProgressHandler(Progress p);
         public static event ProgressHandler Progress;
 
     }
-    public struct FFmpegConfig
+    public class FFmpegConfig
     {
         public string CorePath { get; init; }
-        public bool Log { get; init; }
+        public bool Log { get; init; } = true;
+    }
+    public class Progress
+    {
+        public double ratio { get; init; }
+    }
+    public class Logs
+    {
+        public string type { get; init; }
+        public string message { get; init; }
     }
 }
