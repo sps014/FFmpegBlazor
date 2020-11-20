@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FFMPEG.Blazor\FFMPEG.Blazor.csproj" />
+    <ProjectReference Include="..\FFmpegBlazor\FFmpegBlazor.csproj" />
   </ItemGroup>
 
 </Project>

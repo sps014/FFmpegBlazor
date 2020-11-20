@@ -1,5 +1,5 @@
 ﻿using Microsoft.JSInterop;
-using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -12,13 +12,19 @@ namespace FFmpegBlazor
         internal IJSInProcessObjectReference processReference;
         internal int Hash;
         internal static int HashCount = 0;
+        internal DotNetObjectReference<FFMPEG> dotnetReference;
         internal FFMPEG(int hash)
         {
             Hash = hash;
+            dotnetReference = DotNetObjectReference.Create(this);
         }
-        public async Task Load()
+        
+        public async Task Load(bool triggerEvents=false)
         {
             await processReference.InvokeVoidAsync("loadFFmpeg", Hash);
+            if(triggerEvents)
+                await processReference.InvokeVoidAsync("setFFmpegEvent", Hash,dotnetReference);
+
         }
         public async Task Run(params string[] Parameters)
         {
@@ -34,13 +40,12 @@ namespace FFmpegBlazor
 
             await Task.Delay(1);
 
-            var length = reference.InvokeUnmarshalled<FileConf, int>("readFileLength", new FileConf() { Hash = Hash }
-            );
+            var length = reference.InvokeUnmarshalled<FileConf, int>("readFileLength", new() { Hash = Hash });
             var array = new byte[length];
 
-            reference.InvokeUnmarshalled<FileConf, byte[], object>("readFileProcess", new FileConf() { Hash = Hash }, array);
-            await Task.Delay(1);
-            return await Task.FromResult(array);
+            reference.InvokeUnmarshalled<FileConf, byte[], object>("readFileProcess", new() { Hash = Hash }, array);
+            
+            return array;
         }
         public void WriteFile(string path, byte[] buffer)
         {
@@ -73,6 +78,25 @@ namespace FFmpegBlazor
         {
             processReference.InvokeVoid("disposeFFmpeg", Hash);
         }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [JSInvokable("logger")]
+        public void LoggerCallback(Logs message)
+        {
+            Logger?.Invoke(message);
+        }
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [JSInvokable("progress")]
+        public void ProgressCallback(Progress p)
+        {
+            Progress?.Invoke(p);
+        }
+
+        public delegate void LoggerHandler(Logs log);
+        public event LoggerHandler Logger;
+        public delegate void ProgressHandler(Progress p);
+        public event ProgressHandler Progress;
+
         [StructLayout(LayoutKind.Explicit)]
         internal struct FileConf
         {

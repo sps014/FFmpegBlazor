@@ -4,7 +4,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace FFMPEG.Sample
+namespace SampleApp
 {
     public class Program
     {

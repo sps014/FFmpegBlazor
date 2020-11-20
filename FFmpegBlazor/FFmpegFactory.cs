@@ -13,12 +13,10 @@ namespace FFmpegBlazor
 
         private static IJSUnmarshalledObjectReference reference;
         private static IJSInProcessObjectReference processReference;
-
         private static DotNetObjectReference<FFmpegFactory> dotNetObjectReference;
 
         public static async Task Init([NotNull] IJSRuntime runtime, string cdnURL = null)
         {
-
             Runtime = runtime;
 
             if (Runtime == null)
@@ -40,10 +38,8 @@ namespace FFmpegBlazor
                 .InvokeAsync<IJSInProcessObjectReference>("FfmpegBlazorReference");
         }
 
-        public static FFMPEG CreateFFmpeg(FFmpegConfig config = null)
+        public static FFMPEG CreateFFmpeg(FFmpegConfig config = new FFmpegConfig())
         {
-            if (config == null)
-                config = new FFmpegConfig();
 
             processReference.InvokeVoid("createFFmpeg", FFMPEG.HashCount, config, dotNetObjectReference);
 
@@ -88,17 +84,17 @@ namespace FFmpegBlazor
         public delegate void ProgressHandler(Progress p);
         public static event ProgressHandler Progress;
     }
-    public class FFmpegConfig
+    public struct FFmpegConfig
     {
         public string CorePath { get; init; }
-        public bool Log { get; init; } = true;
+        public bool Log { get; init; }
     }
-    public class Progress
+    public struct Progress
     {
         [JsonPropertyName("ratio")]
         public double Ratio { get; init; }
     }
-    public class Logs
+    public struct Logs
     {
         [JsonPropertyName("type")]
         public string Type { get; init; }

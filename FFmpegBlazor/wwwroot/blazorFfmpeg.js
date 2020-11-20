@@ -66,6 +66,10 @@ window.FfmpegBlazorReference = () => {
         isLoadedFFmpeg: (h) => {
             return ffmpegObjectInstances[h].isLoaded();
         },
+        setFFmpegEvent: (h, dotnet) => {
+            ffmpegObjectInstances[h].setProgress((p) => { dotnet.invokeMethodAsync("progress", p); });
+            ffmpegObjectInstances[h].setLogger((p) => { dotnet.invokeMethodAsync("logger", p); });
+        },
         disposeFFmpeg: (hash) => {
             delete ffmpegObjectInstances[hash];
         },
