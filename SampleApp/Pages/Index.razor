@@ -2,10 +2,10 @@
 @using FFmpegBlazor
 @inject IJSRuntime Runtime
 @using System.IO
+@using Microsoft.AspNetCore.Components.Forms
 
-<Microsoft.AspNetCore.Components.Forms.InputFile OnChange="fileLoad">
 
-</Microsoft.AspNetCore.Components.Forms.InputFile>
+<InputFile OnChange="fileLoad"/>
 <button class="btn btn-primary" @onclick="Load">Load</button>
 <video width="300" height="200" autoplay controls src="@url"></video>
 <audio controls src="@url2"></audio>
@@ -20,7 +20,7 @@
     async void fileLoad(InputFileChangeEventArgs v)
     {
         var file = v.GetMultipleFiles()[0];
-        Stream stream = file.OpenReadStream(100000000);
+        var stream = file.OpenReadStream(100000000);
         buffer = new byte[file.Size];
         Console.WriteLine(file.ContentType);
         await stream.ReadAsync(buffer);

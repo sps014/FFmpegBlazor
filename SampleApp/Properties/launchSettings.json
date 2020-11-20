@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:54580",
-      "sslPort": 44356
+      "applicationUrl": "http://localhost:57670",
+      "sslPort": 44334
     }
   },
   "profiles": {
@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "FFMPEG.Sample": {
+    "SampleApp": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

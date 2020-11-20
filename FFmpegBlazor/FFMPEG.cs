@@ -34,11 +34,10 @@ namespace FFmpegBlazor
 
             await Task.Delay(1);
 
-            var length = reference.InvokeUnmarshalled<FileConf, int>("readFileLength", new FileConf() { Hash = Hash }
-            );
+            var length = reference.InvokeUnmarshalled<FileConf, int>("readFileLength", new() { Hash = Hash });
             var array = new byte[length];
 
-            reference.InvokeUnmarshalled<FileConf, byte[], object>("readFileProcess", new FileConf() { Hash = Hash }, array);
+            reference.InvokeUnmarshalled<FileConf, byte[], object>("readFileProcess", new() { Hash = Hash }, array);
             await Task.Delay(1);
             return await Task.FromResult(array);
         }
