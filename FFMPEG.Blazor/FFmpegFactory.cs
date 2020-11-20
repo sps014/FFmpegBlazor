@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace FFmpegBlazor
@@ -24,6 +25,7 @@ namespace FFmpegBlazor
                 throw new ArgumentNullException(paramName: nameof(runtime), message: "runtime parameter can't be null");
 
             cdnURL ??= "https://unpkg.com/@ffmpeg/ffmpeg@0.9.5/dist/ffmpeg.min.js";
+
             await Runtime.InvokeVoidAsync("import", cdnURL);
             await Runtime.InvokeVoidAsync("import", "./_content/FFmpegBlazor/blazorFfmpeg.js");
 
@@ -85,7 +87,6 @@ namespace FFmpegBlazor
         public static event LoggerHandler Logger;
         public delegate void ProgressHandler(Progress p);
         public static event ProgressHandler Progress;
-
     }
     public class FFmpegConfig
     {
@@ -94,11 +95,15 @@ namespace FFmpegBlazor
     }
     public class Progress
     {
-        public double ratio { get; init; }
+        [JsonPropertyName("ratio")]
+        public double Ratio { get; init; }
     }
     public class Logs
     {
-        public string type { get; init; }
-        public string message { get; init; }
+        [JsonPropertyName("type")]
+        public string Type { get; init; }
+
+        [JsonPropertyName("message")]
+        public string Message { get; init; }
     }
 }
