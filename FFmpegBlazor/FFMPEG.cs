@@ -1,5 +1,4 @@
 ﻿using Microsoft.JSInterop;
-using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -38,8 +37,8 @@ namespace FFmpegBlazor
             var array = new byte[length];
 
             reference.InvokeUnmarshalled<FileConf, byte[], object>("readFileProcess", new() { Hash = Hash }, array);
-            await Task.Delay(1);
-            return await Task.FromResult(array);
+            
+            return array;
         }
         public void WriteFile(string path, byte[] buffer)
         {

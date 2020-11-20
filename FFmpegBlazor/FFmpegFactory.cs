@@ -13,12 +13,10 @@ namespace FFmpegBlazor
 
         private static IJSUnmarshalledObjectReference reference;
         private static IJSInProcessObjectReference processReference;
-
         private static DotNetObjectReference<FFmpegFactory> dotNetObjectReference;
 
         public static async Task Init([NotNull] IJSRuntime runtime, string cdnURL = null)
         {
-
             Runtime = runtime;
 
             if (Runtime == null)
