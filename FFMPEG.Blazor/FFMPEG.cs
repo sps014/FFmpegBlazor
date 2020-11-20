@@ -40,7 +40,6 @@ namespace FFmpegBlazor
 
             reference.InvokeUnmarshalled<FileConf, byte[], object>("readFileProcess", new FileConf() { Hash = Hash }, array);
             await Task.Delay(1);
-            Console.WriteLine("read:" + length);
             return await Task.FromResult(array);
         }
         public void WriteFile(string path, byte[] buffer)
@@ -56,7 +55,7 @@ namespace FFmpegBlazor
             reference.InvokeVoid("unlinkFileFFmpeg", Hash, path);
         }
         /// <summary>
-        /// Use ReadFile and WriteFile , Unlink file , for other command use this directly.
+        /// Use fast ReadFile(), WriteFile() and UnlinkFile() , for other command use use this FS method directly.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="method"></param>
