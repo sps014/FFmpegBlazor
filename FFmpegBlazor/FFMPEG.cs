@@ -19,10 +19,11 @@ namespace FFmpegBlazor
             dotnetReference = DotNetObjectReference.Create(this);
         }
         
-        public async Task Load()
+        public async Task Load(bool triggerEvents=false)
         {
             await processReference.InvokeVoidAsync("loadFFmpeg", Hash);
-            await processReference.InvokeVoidAsync("setFFmpegEvent", Hash,dotnetReference);
+            if(triggerEvents)
+                await processReference.InvokeVoidAsync("setFFmpegEvent", Hash,dotnetReference);
 
         }
         public async Task Run(params string[] Parameters)
