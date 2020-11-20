@@ -5,6 +5,10 @@ FFmpegBlazor provides ability to utilize ffmpeg.wasm from Blazor C#.\
 FFmpegBlazor integrates nicely with Blazor `InputFile` Component.
 
 
+### Installation
+
+Download the Nuget Package and you are good to go , no extra configuration required.
+
 
 ### Sample 
 Here is a sample page to convert mp4 to mp3 and play it in browser.
