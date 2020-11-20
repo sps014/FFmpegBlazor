@@ -20,9 +20,8 @@
     async void fileLoad(InputFileChangeEventArgs v)
     {
         var file = v.GetMultipleFiles()[0];
-        var stream = file.OpenReadStream(100000000);
+        using var stream = file.OpenReadStream(100000000);
         buffer = new byte[file.Size];
-        Console.WriteLine(file.ContentType);
         await stream.ReadAsync(buffer);
 
         url = FFmpegFactory.CreateURLFromBuffer(buffer, "myFile.mp4", file.ContentType);
@@ -39,7 +38,7 @@
                 {
                     var res = await ff.ReadFile("output.mp3");
                     url2 = FFmpegFactory.CreateURLFromBuffer(res, "output.mp3", "audio/mp3");
-                    FFmpegFactory.DownloadBufferAsFile(res, "output.mp3", "audio/mp3");
+                    //FFmpegFactory.DownloadBufferAsFile(res, "output.mp3", "audio/mp3");
                     StateHasChanged();
                 }
                 Console.WriteLine($"Progress {m.Ratio}");
@@ -52,13 +51,10 @@
     async void Load()
     {
         ff = FFmpegFactory.CreateFFmpeg(new FFmpegConfig() { Log = false });
+
         await ff.Load();
+
         ff.WriteFile("myFile.mp4", buffer);
         await ff.Run("-i", "myFile.mp4", "output.mp3");
-
-        // await ffmpeg.run('-i', 'flame.avi', '-s', '1920x1080', 'output.mp4');
-
-        ///Console.WriteLine(buff == null ? "null" : "not null");
-        //Console.WriteLine("buffer");
     }
 }

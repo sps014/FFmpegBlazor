@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -11,13 +12,18 @@ namespace FFmpegBlazor
         internal IJSInProcessObjectReference processReference;
         internal int Hash;
         internal static int HashCount = 0;
+        internal DotNetObjectReference<FFMPEG> dotnetReference;
         internal FFMPEG(int hash)
         {
             Hash = hash;
+            dotnetReference = DotNetObjectReference.Create(this);
         }
+        
         public async Task Load()
         {
             await processReference.InvokeVoidAsync("loadFFmpeg", Hash);
+            await processReference.InvokeVoidAsync("setFFmpegEvent", Hash,dotnetReference);
+
         }
         public async Task Run(params string[] Parameters)
         {
@@ -71,6 +77,25 @@ namespace FFmpegBlazor
         {
             processReference.InvokeVoid("disposeFFmpeg", Hash);
         }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [JSInvokable("logger")]
+        public void LoggerCallback(Logs message)
+        {
+            Logger?.Invoke(message);
+        }
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [JSInvokable("progress")]
+        public void ProgressCallback(Progress p)
+        {
+            Progress?.Invoke(p);
+        }
+
+        public delegate void LoggerHandler(Logs log);
+        public event LoggerHandler Logger;
+        public delegate void ProgressHandler(Progress p);
+        public event ProgressHandler Progress;
+
         [StructLayout(LayoutKind.Explicit)]
         internal struct FileConf
         {
