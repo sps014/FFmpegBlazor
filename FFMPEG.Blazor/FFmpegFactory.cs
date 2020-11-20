@@ -1,13 +1,10 @@
 ﻿using Microsoft.JSInterop;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
-namespace Ffmpeg
+namespace FFmpegBlazor
 {
     public class FFmpegFactory
     {
@@ -18,13 +15,18 @@ namespace Ffmpeg
 
         private static DotNetObjectReference<FFmpegFactory> dotNetObjectReference;
 
-        public static async Task Init(IJSRuntime runtime)
+        public static async Task Init([NotNull] IJSRuntime runtime, string cdnURL = null)
         {
 
             Runtime = runtime;
 
             if (Runtime == null)
-                throw new ArgumentNullException("runtime parameter can't be null");
+                throw new ArgumentNullException(paramName: nameof(runtime), message: "runtime parameter can't be null");
+
+            cdnURL ??= "https://unpkg.com/@ffmpeg/ffmpeg@0.9.5/dist/ffmpeg.min.js";
+            await Runtime.InvokeVoidAsync("import", cdnURL);
+            await Runtime.InvokeVoidAsync("import", "./_content/FFmpegBlazor/blazorFfmpeg.js");
+
 
             dotNetObjectReference = DotNetObjectReference.Create(new FFmpegFactory());
 
@@ -36,14 +38,14 @@ namespace Ffmpeg
                 .InvokeAsync<IJSInProcessObjectReference>("FfmpegBlazorReference");
         }
 
-        public static FFMPEG CreateFFmpeg(FFmpegConfig config=null)
+        public static FFMPEG CreateFFmpeg(FFmpegConfig config = null)
         {
             if (config == null)
                 config = new FFmpegConfig();
-            
-            processReference.InvokeVoid("createFFmpeg",FFMPEG.HashCount,config,dotNetObjectReference);
 
-            var ffObject=new FFMPEG(FFMPEG.HashCount) 
+            processReference.InvokeVoid("createFFmpeg", FFMPEG.HashCount, config, dotNetObjectReference);
+
+            var ffObject = new FFMPEG(FFMPEG.HashCount)
             {
                 processReference = processReference,
                 reference = reference,
@@ -54,7 +56,7 @@ namespace Ffmpeg
 
             return ffObject;
         }
-        public static string CreateURLFromBuffer(byte[] buffer,string name,string type)
+        public static string CreateURLFromBuffer(byte[] buffer, string name, string type)
         {
             return reference.InvokeUnmarshalled<byte[], string, string, string>("createObjectURL", buffer, name, type);
         }
@@ -64,9 +66,9 @@ namespace Ffmpeg
         }
         public static void RevokeObjectURL(string blobURL)
         {
-            reference.InvokeVoid("revokeObjectURLCleanUp",blobURL);
+            reference.InvokeVoid("revokeObjectURLCleanUp", blobURL);
         }
-        
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JSInvokable("logger")]
         public void LoggerCallback(Logs message)

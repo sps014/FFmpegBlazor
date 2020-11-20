@@ -1,5 +1,5 @@
 ﻿@page "/"
-@using Ffmpeg;
+@using FFmpegBlazor
 @inject IJSRuntime Runtime
 @using System.IO
 
@@ -32,13 +32,13 @@
     {
         if (FFmpegFactory.Runtime == null)
         {
-            FFmpegFactory.Logger += (m) => Console.WriteLine(m.type+"   "+m.message);
-            FFmpegFactory.Progress += async(m) =>
+            FFmpegFactory.Logger += (m) => Console.WriteLine(m.type + " " + m.message);
+            FFmpegFactory.Progress += async (m) =>
             {
-                if(m.ratio==1)
+                if (m.ratio == 1)
                 {
-                    var res=await ff.ReadFile("output.mp3");
-                    url2=FFmpegFactory.CreateURLFromBuffer(res, "output.mp3", "audio/mp3");
+                    var res = await ff.ReadFile("output.mp3");
+                    url2 = FFmpegFactory.CreateURLFromBuffer(res, "output.mp3", "audio/mp3");
                     FFmpegFactory.DownloadBufferAsFile(res, "output.mp3", "audio/mp3");
                     StateHasChanged();
                 }
@@ -54,9 +54,9 @@
         ff = FFmpegFactory.CreateFFmpeg(new FFmpegConfig() { Log = false });
         await ff.Load();
         ff.WriteFile("myFile.mp4", buffer);
-        await ff.Run("-i","myFile.mp4","output.mp3");
+        await ff.Run("-i", "myFile.mp4", "output.mp3");
 
-        //  await ffmpeg.run('-i', 'flame.avi', '-s', '1920x1080', 'output.mp4');
+        // await ffmpeg.run('-i', 'flame.avi', '-s', '1920x1080', 'output.mp4');
 
         ///Console.WriteLine(buff == null ? "null" : "not null");
         //Console.WriteLine("buffer");

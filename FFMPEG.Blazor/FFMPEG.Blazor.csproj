@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>FFMPEG.Blazor</AssemblyName>
-    <RootNamespace>Ffmpeg</RootNamespace>
+    <AssemblyName>FFmpegBlazor</AssemblyName>
+    <RootNamespace>FFmpegBlazor</RootNamespace>
   </PropertyGroup>
 
   
