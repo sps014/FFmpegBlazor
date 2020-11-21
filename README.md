@@ -1,7 +1,7 @@
 # FFmpegBlazor
 
- [![NuGet Package](https://img.shields.io/badge/nuget-v1.0.6%20Preview%204-orange.svg)](https://www.nuget.org/packages/FFmpegBlazor/)
-[![NuGet Badge](https://buildstats.info/nuget/BlazorML5)](https://www.nuget.org/packages/FFmpegBlazor/)
+ [![NuGet Package](https://img.shields.io/badge/nuget-v1.0.0%20Preview%204-orange.svg)](https://www.nuget.org/packages/FFmpegBlazor/)
+[![NuGet Badge](https://buildstats.info/nuget/FFmpegBlazor)](https://www.nuget.org/packages/FFmpegBlazor/)
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 
  
