@@ -38,7 +38,7 @@ namespace FFmpegBlazor
         }
 
         /// <summary>
-        /// This is the major function in ffmpeg.wasm, you can just imagine it as ffmpeg native cli and what you need to pass is the same.
+        /// This is the major function in ffmpeg.wasm, you can just imagine it as ffmpeg native cli and what you need to pass args in the same way.
         /// </summary>
         /// <param name="Parameters">variables number of params you can pass around</param>
         /// <returns>a Task</returns>
@@ -72,7 +72,7 @@ namespace FFmpegBlazor
         /// Write buffer of C# to WASM in-memory File so that FFmpeg can interact 
         /// </summary>
         /// <param name="path">write path of file</param>
-        /// <param name="buffer">array will all bytes</param>
+        /// <param name="buffer">File bytes</param>
         public void WriteFile(string path, byte[] buffer)
         {
             reference.InvokeUnmarshalled<FileConf, byte[], object>("writeFileFFmpeg", new FileConf()
