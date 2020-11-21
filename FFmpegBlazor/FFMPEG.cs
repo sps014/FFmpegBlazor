@@ -7,6 +7,9 @@ namespace FFmpegBlazor
 {
     public class FFMPEG
     {
+        /// <summary>
+        /// Whether FFMpeg core wasm loaded or not
+        /// </summary>
         public bool IsLoaded => IsLoadedFFmpeg();
 
         internal IJSRuntime Runtime;
@@ -21,6 +24,11 @@ namespace FFmpegBlazor
             dotnetReference = DotNetObjectReference.Create(this);
         }
         
+        /// <summary>
+        /// Download pure Wasm On CLient side around ~25 mb
+        /// </summary>
+        /// <param name="triggerEvents">whether to trigger events like progress at object level or not, if false FFmpegFactory.Progress can give progress ratio</param>
+        /// <returns></returns>
         public async Task Load(bool triggerEvents=false)
         {
             await processReference.InvokeVoidAsync("loadFFmpeg", Hash);
@@ -28,10 +36,21 @@ namespace FFmpegBlazor
                 await processReference.InvokeVoidAsync("setFFmpegEvent", Hash,dotnetReference);
 
         }
+
+        /// <summary>
+        /// This is the major function in ffmpeg.wasm, you can just imagine it as ffmpeg native cli and what you need to pass is the same.
+        /// </summary>
+        /// <param name="Parameters">variables number of params you can pass around</param>
+        /// <returns>a Task</returns>
         public async Task Run(params string[] Parameters)
         {
             await processReference.InvokeVoidAsync("runFFmpeg", Hash, Parameters);
         }
+        /// <summary>
+        /// Read In-Memory Wasm File (Ideal Method)
+        /// </summary>
+        /// <param name="path">path of in-mem file</param>
+        /// <returns>byte[] reference</returns>
         public async Task<byte[]> ReadFile(string path)
         {
             _ = reference.InvokeUnmarshalled<FileConf, bool>("readFileFFmpeg", new FileConf()
@@ -49,6 +68,11 @@ namespace FFmpegBlazor
             
             return array;
         }
+        /// <summary>
+        /// Write buffer of C# to WASM in-memory File so that FFmpeg can interact 
+        /// </summary>
+        /// <param name="path">write path of file</param>
+        /// <param name="buffer">array will all bytes</param>
         public void WriteFile(string path, byte[] buffer)
         {
             reference.InvokeUnmarshalled<FileConf, byte[], object>("writeFileFFmpeg", new FileConf()
@@ -57,6 +81,10 @@ namespace FFmpegBlazor
                 Path = path
             }, buffer);
         }
+        /// <summary>
+        /// Delete In Memory Wasm file 
+        /// </summary>
+        /// <param name="path">path to file to delete</param>
         public void UnlinkFile(string path)
         {
             reference.InvokeVoid("unlinkFileFFmpeg", Hash, path);
@@ -104,8 +132,14 @@ namespace FFmpegBlazor
         }
 
         public delegate void LoggerHandler(Logs log);
+        /// <summary>
+        /// Subsribe to this event and obtain each logs [Object Level]
+        /// </summary>
         public event LoggerHandler Logger;
         public delegate void ProgressHandler(Progress p);
+        /// <summary>
+        /// Subsribe to this event and obtain conversion progress [Object Level]
+        /// </summary>
         public event ProgressHandler Progress;
 
         [StructLayout(LayoutKind.Explicit)]
