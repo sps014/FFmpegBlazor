@@ -1,4 +1,9 @@
 # FFmpegBlazor
+
+ [![NuGet Package](https://img.shields.io/badge/nuget-v1.0.6%20Preview%204-orange.svg)](https://www.nuget.org/packages/FFmpegBlazor/)
+[![NuGet Badge](https://buildstats.info/nuget/BlazorML5)](https://www.nuget.org/packages/FFmpegBlazor/)
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+
  
 FFmpegBlazor provides ability to utilize ffmpeg.wasm from Blazor C#.\
 [ffmpeg.wasm](https://github.com/ffmpegwasm/ffmpeg.wasm) is a pure Webassembly / Javasrcipt  port of FFmpeg. It enables video & audio record, convert and stream right inside browsers.\
