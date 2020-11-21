@@ -13,6 +13,9 @@ FFmpegBlazor integrates nicely with Blazor `InputFile` Component.
 ### Installation
 
 Download the Nuget Package and you are good to go , no extra configuration required.
+```cli
+dotnet add package FFmpegBlazor 
+```
 
 
 ### Sample 
