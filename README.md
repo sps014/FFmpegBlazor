@@ -16,6 +16,7 @@ Download package via  Nuget  or DotNet CLI and you are good to go , no extra con
 ```cli
 dotnet add package FFmpegBlazor 
 ```
+[API Documentation](https://github.com/sps014/FFmpegBlazor/wiki)
 
 
 ### Sample 
