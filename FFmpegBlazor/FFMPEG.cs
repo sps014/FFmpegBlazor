@@ -7,6 +7,8 @@ namespace FFmpegBlazor
 {
     public class FFMPEG
     {
+        public bool IsLoaded => IsLoadedFFmpeg();
+
         internal IJSRuntime Runtime;
         internal IJSUnmarshalledObjectReference reference;
         internal IJSInProcessObjectReference processReference;
@@ -79,15 +81,24 @@ namespace FFmpegBlazor
             processReference.InvokeVoid("disposeFFmpeg", Hash);
         }
 
+        /// <summary>
+        /// This Method is not intented for External Use
+        /// </summary>
+        /// <param name="message"></param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JSInvokable("logger")]
-        public void LoggerCallback(Logs message)
+        public void ZLoggerCallback(Logs message)
         {
             Logger?.Invoke(message);
         }
+
+        /// <summary>
+        /// This Method is not intented for External Use
+        /// </summary>
+        /// <param name="p"></param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JSInvokable("progress")]
-        public void ProgressCallback(Progress p)
+        public void ZProgressCallback(Progress p)
         {
             Progress?.Invoke(p);
         }
