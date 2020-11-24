@@ -6,7 +6,7 @@
 
  
 FFmpegBlazor provides ability to utilize ffmpeg.wasm from Blazor C#.\
-[ffmpeg.wasm](https://github.com/ffmpegwasm/ffmpeg.wasm) is a pure Webassembly / Javasrcipt  port of FFmpeg. It enables video & audio record, convert and stream right inside browsers.\
+[ffmpeg.wasm](https://github.com/ffmpegwasm/ffmpeg.wasm) is a pure Webassembly / Javascript  port of FFmpeg. It enables video & audio record, convert and stream right inside browsers.\
 FFmpegBlazor integrates nicely with Blazor `InputFile` Component.
 
 
@@ -78,7 +78,7 @@ Here is a sample page to convert mp4 to mp3 and play it in browser.
         ff = FFmpegFactory.CreateFFmpeg(new FFmpegConfig() { Log = true });
 
         //download all dependencies from cdn
-        await ff.Load(false); //parameter false means not to trigger events in ffmpeg Clase instance
+        await ff.Load(); 
 
         if (!ff.IsLoaded) return;
 
@@ -96,6 +96,7 @@ Here is a sample page to convert mp4 to mp3 and play it in browser.
     {
         Console.WriteLine($"Progress {m.Ratio}");
 
+        //if ffmpeg processing is complete (generate a media URL so that it can be played or alternatively download that file)
         if (m.Ratio == 1)
         {
             //get bytepointer from c wasm to c#
