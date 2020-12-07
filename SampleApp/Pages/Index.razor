@@ -3,11 +3,37 @@
 @inject IJSRuntime Runtime
 @using Microsoft.AspNetCore.Components.Forms
 
-
-<InputFile OnChange="fileLoad" /><br /> <br />
+<MudButton Variant="Variant.Filled" class="btn-file">
+    <InputFile OnChange="fileLoad" />Open File
+</MudButton>
+<br /><br>
 <video width="300" height="200" autoplay controls src="@url" /><br /><br />
-<button class="btn btn-primary" @onclick="Process">Convert Mp3</button><br /><br />
+<MudButton Variant="Variant.Filled" OnClick="Process" Color="Color.Error">Convert Mp3</MudButton>
+<br /><br />
 <audio controls src="@url2" />
+
+<style>
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-file input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;
+        background: white;
+        cursor: inherit;
+        display: block;
+    }
+</style>
 
 @code
 {
