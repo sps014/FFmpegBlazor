@@ -6,9 +6,10 @@
 <MudButton Variant="Variant.Filled" class="btn-file">
     <InputFile OnChange="fileLoad" />Open File
 </MudButton>
-<br />
+<br /><br>
 <video width="300" height="200" autoplay controls src="@url" /><br /><br />
-<button class="btn btn-primary" @onclick="Process">Convert Mp3</button><br /><br />
+<MudButton Variant="Variant.Filled" OnClick="Process" Color="Color.Error">Convert Mp3</MudButton>
+<br /><br />
 <audio controls src="@url2" />
 
 <style>
