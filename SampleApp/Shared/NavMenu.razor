@@ -1,13 +1,13 @@
 ﻿<MudLayout>
     <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+        <MudIconButton Icon="@Icons.Material.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="ToggleDrawer" />
         <MudAppBarSpacer />
-        <MudIconButton Icon="@Icons.Custom.GitHub" Color="Color.Inherit" Link="https://github.com/Garderoben/MudBlazor"
+        <MudIconButton Icon="@Icons.Custom.GitHub" Color="Color.Inherit" Link="https://github.com/sps014/FFmpegBlazor"
             Target="_blank" />
     </MudAppBar>
     <MudDrawer @bind-Open="@open" Elevation="1">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h6">FFMpeg Sample</MudText>
+            <MudText Typo="Typo.h6">FFMpeg Examples</MudText>
         </MudDrawerHeader>
         <MudNavMenu>
             <MudNavLink Match="NavLinkMatch.All" Href="/">Home</MudNavLink>
@@ -17,10 +17,13 @@
     </MudDrawer>
     <MudMainContent Class="pt-16 px-16">
         <MudContainer Class="mt-6">
+            @ChildPages
         </MudContainer>
     </MudMainContent>
 </MudLayout>
 @code{
+    [Parameter]
+    public RenderFragment ChildPages { get; set; }
     bool open = true;
 
     void ToggleDrawer()
