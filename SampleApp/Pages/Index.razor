@@ -3,9 +3,10 @@
 @inject IJSRuntime Runtime
 @using Microsoft.AspNetCore.Components.Forms
 
-<MudButton Variant="Variant.Filled" class="btn-file">
-    <InputFile OnChange="fileLoad" />Open File
-</MudButton>
+<MudInputFile OnChanged="fileLoad" Color="Color.Warning">
+    Open Video File
+</MudInputFile>
+
 <br /><br>
 <video width="300" height="200" autoplay controls src="@url" /><br /><br />
 <MudButton Variant="Variant.Filled" OnClick="Process" Color="Color.Error">Convert Mp3</MudButton>
@@ -43,6 +44,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+
         if (FFmpegFactory.Runtime == null)
         {
             FFmpegFactory.Logger += WriteLogs;
