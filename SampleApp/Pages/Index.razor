@@ -4,7 +4,7 @@
 @using Microsoft.AspNetCore.Components.Forms
 
 <MudInputFile OnChanged="fileLoad" Color="Color.Warning">
-    Open Video File
+    Open Mp4 File
 </MudInputFile>
 
 <br /><br>
@@ -13,28 +13,6 @@
 <br /><br />
 <audio controls src="@url2" />
 
-<style>
-    .btn-file {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .btn-file input[type=file] {
-        position: absolute;
-        top: 0;
-        right: 0;
-        min-width: 100%;
-        min-height: 100%;
-        font-size: 100px;
-        text-align: right;
-        filter: alpha(opacity=0);
-        opacity: 0;
-        outline: none;
-        background: white;
-        cursor: inherit;
-        display: block;
-    }
-</style>
 
 @code
 {
