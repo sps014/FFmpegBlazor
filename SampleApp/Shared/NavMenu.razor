@@ -7,12 +7,12 @@
     </MudAppBar>
     <MudDrawer @bind-Open="@open" Elevation="1">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h6">FFMpeg Examples</MudText>
+            <MudText Typo="Typo.h6" Color="Color.Secondary">FFMpeg Examples</MudText>
+            
         </MudDrawerHeader>
         <MudNavMenu>
             <MudNavLink Match="NavLinkMatch.All" Href="/">Home</MudNavLink>
-            <MudNavLink Match="NavLinkMatch.All">Library</MudNavLink>
-            <MudNavLink Match="NavLinkMatch.All">Community</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Href="/tomp3">Mp4 To Mp3</MudNavLink>
         </MudNavMenu>
     </MudDrawer>
     <MudMainContent Class="pt-16 px-16">
