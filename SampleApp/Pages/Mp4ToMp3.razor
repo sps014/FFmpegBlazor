@@ -40,7 +40,6 @@ else
     FFMPEG ff;
     byte[] buffer;
     bool started = false;
-    List<Logs> logs = new List<Logs>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -77,7 +76,6 @@ else
     async void Process()
     {
         started = true;
-        logs.Clear();
 
         StateHasChanged();
         //create an instance
@@ -122,8 +120,6 @@ else
 
     void WriteLogs(Logs m)
     {
-        logs.Add(m);
-        StateHasChanged();
         Console.WriteLine(m.Type + " " + m.Message);
     }
 }
