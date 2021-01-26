@@ -1,48 +1,49 @@
-﻿@page "/"
+﻿@page "/tomp3"
+@using FFmpegBlazor
+@inject IJSRuntime Runtime
+@using Microsoft.AspNetCore.Components.Forms
 
-<MudButton Variant="Variant.Filled" class="btn-file">
-    <InputFile OnChange="fileLoad" />Open File
-</MudButton>
-<br /><br>
-<video width="300" height="200" autoplay controls src="@url" /><br /><br />
-<MudButton Variant="Variant.Filled" OnClick="Process" Color="Color.Error">Convert Mp3</MudButton>
-<br /><br />
-<MudProgressLinear Value="100-progress"  Color="Color.Secondary"></MudProgressLinear>
-<br /><br />
+<MudInputFile OnChanged="fileLoad" Color="Color.Warning">
+    Open Mp4 File
+</MudInputFile>
+<br />
+<br />
+<video width="300" height="200" autoplay controls src="@url" />
+<br />
+<br />
+@if (started)
+{
+    <MudAlert Severity="Severity.Warning" Dense="true">
+        Please Wait while Converting to Mp3 &nbsp;<br /><br />
+        <MudProgressLinear Color="Color.Warning" Size="Size.Medium" Indeterminate="true" />
+    </MudAlert>
+}
+else
+{
+    <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="Process" Color="Color.Error">Convert Mp3</MudButton>
+}
+<br />
+<br />
 <audio controls src="@url2" />
 
-<style>
-    .btn-file {
-        position: relative;
-        overflow: hidden;
-    }
+<br />
+<br />
 
-    .btn-file input[type=file] {
-        position: absolute;
-        top: 0;
-        right: 0;
-        min-width: 100%;
-        min-height: 100%;
-        font-size: 100px;
-        text-align: right;
-        filter: alpha(opacity=0);
-        opacity: 0;
-        outline: none;
-        background: white;
-        cursor: inherit;
-        display: block;
-    }
-</style>
+@if (started)
+{
+    <MudAlert Severity="Severity.Info">View Logs in Console</MudAlert>
+}
 
 @code
 {
     string url; string url2;
     FFMPEG ff;
     byte[] buffer;
-    float progress;
+    bool started = false;
 
     protected override async Task OnInitializedAsync()
     {
+
         if (FFmpegFactory.Runtime == null)
         {
             FFmpegFactory.Logger += WriteLogs;
@@ -74,9 +75,11 @@
 
     async void Process()
     {
+        started = true;
+
+        StateHasChanged();
         //create an instance
         ff = FFmpegFactory.CreateFFmpeg();
-
         //download all dependencies from cdn
         await ff.Load(); //parameter false means not to trigger events in ffmpeg Clase instance
 
@@ -98,6 +101,8 @@
 
         if (m.Ratio == 1)
         {
+            started = false;
+            StateHasChanged();
             //get bytepointer from c wasm to c#
             var res = await ff.ReadFile("output.mp3");
 
@@ -109,10 +114,8 @@
 
             //FFmpegFactory.DownloadBufferAsFile(res, "output.mp3", "audio/mp3");
 
+            StateHasChanged();
         }
-        progress = (float)m.Ratio * 100;
-        StateHasChanged();
-
     }
 
     void WriteLogs(Logs m)

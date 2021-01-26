@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>FFmpeg.wasm Bindings for Blazor , convert video, audio right inside your browser with FFmpeg.No JS required At All , plug and Use no need to configure references or any dependencies anywhere. See API Docs and Samples to know more.</Description>
     <Copyright>© 2020 Shivendra Pratap Singh</Copyright>
     <PackageProjectUrl>https://github.com/sps014/FFmpegBlazor</PackageProjectUrl>
