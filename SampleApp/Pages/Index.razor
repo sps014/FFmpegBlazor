@@ -10,6 +10,8 @@
 <video width="300" height="200" autoplay controls src="@url" /><br /><br />
 <MudButton Variant="Variant.Filled" OnClick="Process" Color="Color.Error">Convert Mp3</MudButton>
 <br /><br />
+<MudProgressLinear Value="100-progress"  Color="Color.Secondary"></MudProgressLinear>
+<br /><br />
 <audio controls src="@url2" />
 
 <style>
@@ -40,6 +42,7 @@
     string url; string url2;
     FFMPEG ff;
     byte[] buffer;
+    float progress;
 
     protected override async Task OnInitializedAsync()
     {
@@ -109,8 +112,10 @@
 
             //FFmpegFactory.DownloadBufferAsFile(res, "output.mp3", "audio/mp3");
 
-            StateHasChanged();
         }
+        progress = (float)m.Ratio * 100;
+        StateHasChanged();
+
     }
 
     void WriteLogs(Logs m)
