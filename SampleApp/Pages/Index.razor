@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using FFmpegBlazor
+@inject IJSRuntime Runtime
 
 <MudButton Variant="Variant.Filled" class="btn-file">
     <InputFile OnChange="fileLoad" />Open File
