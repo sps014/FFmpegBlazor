@@ -65,7 +65,7 @@ Here is a sample page to convert mp4 to mp3 and play it in browser.
         //read all bytes
         await stream.ReadAsync(buffer);
 
-        //create a video link from buffer to that video can be played
+        //create a video link from buffer so that video can be played
         url = FFmpegFactory.CreateURLFromBuffer(buffer, "myFile.mp4", file.ContentType);
 
         //reRender DOM
@@ -82,7 +82,7 @@ Here is a sample page to convert mp4 to mp3 and play it in browser.
 
         if (!ff.IsLoaded) return;
 
-        //write buffer to in-memory files
+        //write buffer to in-memory files (special emscripten files, Ffmpeg only interact with this file)
         ff.WriteFile("myFile.mp4", buffer);
 
         //Pass CLI argument here equivalent to ffmpeg -i myFile.mp4 output.mp3
@@ -94,6 +94,7 @@ Here is a sample page to convert mp4 to mp3 and play it in browser.
 
     async void ProgressChange(Progress m)
     {
+         // display progress % (0-1)
         Console.WriteLine($"Progress {m.Ratio}");
 
         //if ffmpeg processing is complete (generate a media URL so that it can be played or alternatively download that file)
