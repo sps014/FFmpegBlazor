@@ -5,6 +5,7 @@ using MudBlazor.Services;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using MudBlazor.Services;
 
 namespace SampleApp
 {
@@ -16,9 +17,8 @@ namespace SampleApp
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddMudBlazorDialog();
-            builder.Services.AddMudBlazorSnackbar();
-            builder.Services.AddMudBlazorResizeListener();
+ 
+            builder.Services.AddMudServices();
             await builder.Build().RunAsync();
         }
     }

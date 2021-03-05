@@ -31,7 +31,7 @@ namespace FFmpegBlazor
             if (Runtime == null)
                 throw new ArgumentNullException(paramName: nameof(runtime), message: "runtime parameter can't be null");
 
-            cdnURL ??= "https://unpkg.com/@ffmpeg/ffmpeg@0.9.5/dist/ffmpeg.min.js";
+            cdnURL ??= "https://unpkg.com/@ffmpeg/ffmpeg@0.9.7/dist/ffmpeg.min.js";
 
             await Runtime.InvokeVoidAsync("import", cdnURL);
             await Runtime.InvokeVoidAsync("import", "./_content/FFmpegBlazor/blazorFfmpeg.js");
