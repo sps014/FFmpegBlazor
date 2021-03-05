@@ -13,10 +13,22 @@
 <br />
 @if (started)
 {
-    <MudAlert Severity="Severity.Warning" Dense="true">
-        Please Wait while Converting to Mp3 &nbsp;<br /><br />
-        <MudProgressLinear Color="Color.Warning" Size="Size.Medium" Indeterminate="true" />
-    </MudAlert>
+
+    @if (pgs == 0)
+    {
+        <MudAlert Severity="@Severity.Warning" Dense="true">
+            Please Wait while Fetching FFmpeg in Browser &nbsp;<br /><br />
+            <MudProgressLinear Color="Color.Warning" Size="Size.Medium" Indeterminate="true" />
+        </MudAlert>
+
+    }
+    else
+    {
+        <MudAlert Severity="@Severity.Info" Dense="true">
+            Please Wait while Converting to Mp3 &nbsp;<br /><br />
+        <MudProgressLinear Color="Color.Success" Size="Size.Medium" Value="pgs" Min="0" Max="100" /> @pgs%
+        </MudAlert>
+    }
 }
 else
 {
@@ -29,7 +41,7 @@ else
 <br />
 <br />
 
-@if (started)
+@if (started && pgs==0)
 {
     <MudAlert Severity="Severity.Info">View Logs in Console</MudAlert>
 }
@@ -40,6 +52,7 @@ else
     FFMPEG ff;
     byte[] buffer;
     bool started = false;
+    int pgs;
 
     protected override async Task OnInitializedAsync()
     {
@@ -75,6 +88,7 @@ else
 
     async void Process()
     {
+        pgs = 0;
         started = true;
 
         StateHasChanged();
@@ -97,7 +111,8 @@ else
 
     async void ProgressChange(Progress m)
     {
-        Console.WriteLine($"Progress {m.Ratio}");
+        pgs = (int)(m.Ratio * 100.0f);
+       // Console.WriteLine($"Progress {m.Ratio}");
 
         if (m.Ratio == 1)
         {
@@ -114,8 +129,9 @@ else
 
             //FFmpegFactory.DownloadBufferAsFile(res, "output.mp3", "audio/mp3");
 
-            StateHasChanged();
         }
+        StateHasChanged();
+
     }
 
     void WriteLogs(Logs m)
