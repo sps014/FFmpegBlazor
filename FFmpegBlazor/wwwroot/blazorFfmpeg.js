@@ -84,6 +84,9 @@ window.FfmpegBlazorReference = () => {
         revokeObjectURLCleanUp: (name) => {
             URL.revokeObjectURL(name);
         },
+        exitfs: (hash) => {
+            ffmpegObjectInstances[hash].exit();
+        },
         downloadFile: (data, name, type) => {
             const contentArray = Blazor.platform.toUint8Array(data);
             const nameStr = BINDING.conv_string(name);

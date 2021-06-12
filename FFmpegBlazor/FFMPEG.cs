@@ -100,6 +100,10 @@ namespace FFmpegBlazor
         {
             return await reference.InvokeAsync<T>("fsFFmpeg", method, args);
         }
+        public void Exit()
+        {
+            reference.InvokeVoid("exitfs",Hash);
+        }
         internal bool IsLoadedFFmpeg()
         {
             return reference.Invoke<bool>("isLoadedFFmpeg", Hash);
