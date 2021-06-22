@@ -9,6 +9,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version=" 6.0.0-preview.5.*" PrivateAssets="all" />
     <PackageReference Include="MudBlazor" Version="5.0.3" />
   </ItemGroup>
+	<PropertyGroup>
+		<PublishTrimmed>true</PublishTrimmed>
+		<BlazorEnableTimeZoneSupport>false</BlazorEnableTimeZoneSupport>
+		<BlazorWebAssemblyPreserveCollationData>false</BlazorWebAssemblyPreserveCollationData>
+		<InvariantGlobalization>true</InvariantGlobalization>
+	</PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FFmpegBlazor\FFmpegBlazor.csproj" />
