@@ -41,7 +41,7 @@ To do so we can create a `web.config` file in root of our project with content
 
 </configuration>
 ```
-Also In actual deployment we need to add these 2 headers in server config to avoid `SharedBufferArray not defined` error.
+Also In actual deployment we need to add these 2 headers in server config to avoid `SharedArrayBuffer not defined` error.
 <br/>Thanks to [@aokocax](https://github.com/aokocax) for helping with it.
 
 ### Sample 
