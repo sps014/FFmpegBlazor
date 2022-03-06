@@ -41,7 +41,9 @@ To do so we can create a `web.config` file in root of our project with content
 
 </configuration>
 ```
+Use [IIS Express](https://github.com/sps014/FFmpegBlazor/issues/9#issuecomment-1059950578) to run apps locally.
 Also In actual deployment we need to add these 2 headers in server config to avoid `SharedArrayBuffer not defined` error.
+You can check Netlify deployment [sample here](https://github.com/sps014/ffmpegBlazor-Deployed).
 <br/>Thanks to [@aokocax](https://github.com/aokocax) for helping with it.
 
 ### Sample 
