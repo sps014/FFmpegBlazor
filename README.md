@@ -18,6 +18,31 @@ dotnet add package FFmpegBlazor
 ```
 [API Documentation](https://github.com/sps014/FFmpegBlazor/wiki)
 
+### Local Testing and Deployment
+
+We need to add 2 headers in Blazor WASM-local-server and in actual deployment static server also
+
+```
+Cross-Origin-Embedder-Policy: require-corp
+Cross-Origin-Opener-Policy: same-origin
+```
+To do so we can create a `web.config` file in root of our project with content 
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+	<system.webServer>
+		<httpProtocol>
+			<customHeaders>
+				<add name="Cross-Origin-Embedder-Policy" value="require-corp"/>
+				<add name="Cross-Origin-Opener-Policy" value="same-origin"/>
+			</customHeaders>
+		</httpProtocol>
+	</system.webServer>
+
+</configuration>
+```
+Also In actual deployment we need to add these 2 headers in server config to avoid `SharedBufferArray not defined` error.
+<br/>Thanks to [@aokocax](https://github.com/aokocax) for helping with it.
 
 ### Sample 
 Here is a sample page to convert mp4 to mp3 and play it in browser.
