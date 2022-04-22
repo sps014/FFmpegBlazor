@@ -18,7 +18,9 @@ dotnet add package FFmpegBlazor
 ```
 [API Documentation](https://github.com/sps014/FFmpegBlazor/wiki)
 
-### Local Testing and Deployment
+### Running WASM App
+
+**Currently we need to use a workaround to run FFmpegApps on web assembly, this will be removed in .NET 7 (Early September 2022) once Multi threading support is available on WASM.**
 
 We need to add 2 headers in Blazor WASM-local-server and in actual deployment static server also
 
