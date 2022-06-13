@@ -40,12 +40,9 @@ window.FfmpegBlazorReference = () => {
             const h = Blazor.platform.readInt32Field(obj, 8);
             return readFileBuffers[h].byteLength;
         },
-        readFileProcess: (obj,buffer)=>
+        readFileProcess: (h)=>
         {
-            const h = Blazor.platform.readInt32Field(obj, 8);
-            let buff = Blazor.platform.toUint8Array(buffer);
-            buff.set(readFileBuffers[h]);
-            delete readFileBuffers[h];
+            return readFileBuffers[h];
         },
         writeFileFFmpeg: async (obj, buffer)=>{
             const contentArray = Blazor.platform.toUint8Array(buffer);
