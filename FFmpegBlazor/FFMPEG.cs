@@ -64,7 +64,6 @@ namespace FFmpegBlazor
             var array =reference.Invoke<byte[]>("readFileProcess",Hash);
             return array;
         }
-
         /// <summary>
         /// Write buffer of C# to WASM in-memory File so that FFmpeg can interact 
         /// </summary>
