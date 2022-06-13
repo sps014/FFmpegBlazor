@@ -58,16 +58,13 @@ namespace FFmpegBlazor
                 Hash = Hash,
                 Path = path
             });
-
-            await Task.Delay(1);
-
-            var length = reference.InvokeUnmarshalled<FileConf, int>("readFileLength", new() { Hash = Hash });
-            var array = new byte[length];
-
-            reference.InvokeUnmarshalled<FileConf, byte[], object>("readFileProcess", new() { Hash = Hash }, array);
-            
+          
+            await Task.Delay(5);
+           
+            var array =reference.Invoke<byte[]>("readFileProcess",Hash);
             return array;
         }
+
         /// <summary>
         /// Write buffer of C# to WASM in-memory File so that FFmpeg can interact 
         /// </summary>
