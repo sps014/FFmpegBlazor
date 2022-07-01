@@ -73,7 +73,7 @@ else
         var file = v.GetMultipleFiles()[0];
 
         //read all bytes
-        using var stream = file.OpenReadStream(100000000); //Max size for file that can be read
+        using var stream = file.OpenReadStream(200000000); //Max size for file that can be read
         buffer = new byte[file.Size];
 
         //read all bytes

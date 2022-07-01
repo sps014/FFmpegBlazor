@@ -44,7 +44,7 @@ namespace FFmpegBlazor
         /// <returns>a Task</returns>
         public async Task Run(params string[] Parameters)
         {
-            await processReference.InvokeVoidAsync("runFFmpeg", Hash, Parameters);
+            await processReference.InvokeVoidAsync("runFFmpeg", Hash, Parameters,dotnetReference);
         }
         /// <summary>
         /// Read In-Memory Wasm File (Ideal Method)
@@ -151,6 +151,17 @@ namespace FFmpegBlazor
             public int Hash;
         }
 
+        public delegate void OnErrorHandler(string message);
+        /// <summary>
+        /// Subscribe to errors caused by Run function call
+        /// </summary>
+        public OnErrorHandler? OnError;
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [JSInvokable("OnErr")]
+        public void OnErr(string message)
+        {
+            OnError?.Invoke(message);
+        }
     }
 
 }
