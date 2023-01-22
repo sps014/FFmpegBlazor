@@ -1,6 +1,8 @@
 ﻿using Microsoft.JSInterop;
+using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FFmpegBlazor
@@ -18,6 +20,8 @@ namespace FFmpegBlazor
         internal int Hash;
         internal static int HashCount = 0;
         internal DotNetObjectReference<FFMPEG> dotnetReference;
+        internal static int ErrorHashCount = 0;
+        internal ConcurrentDictionary<int, string> ErrorMessageMap = new();
         internal FFMPEG(int hash)
         {
             Hash = hash;
@@ -44,7 +48,20 @@ namespace FFmpegBlazor
         /// <returns>a Task</returns>
         public async Task Run(params string[] Parameters)
         {
-            await processReference.InvokeVoidAsync("runFFmpeg", Hash, Parameters);
+            await Run(default, Parameters);
+        }
+        public async Task Run(CancellationToken token,params string[] Parameters)
+        {
+            var errorHash = ErrorHashCount++;
+            await processReference.InvokeVoidAsync("runFFmpeg",token, Hash, Parameters, errorHash, dotnetReference);
+            string errorMessage = null;
+            while(!ErrorMessageMap.TryGetValue(errorHash,out errorMessage))
+            {
+                await Task.Delay(30);
+            }
+            ErrorMessageMap.TryRemove(errorHash,out _);
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+                throw new System.Exception(errorMessage);
         }
         /// <summary>
         /// Read In-Memory Wasm File (Ideal Method)
@@ -107,6 +124,13 @@ namespace FFmpegBlazor
         ~FFMPEG()
         {
             processReference.InvokeVoid("disposeFFmpeg", Hash);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [JSInvokable("runCompleted")]
+        public void ZRunCompleted(string message, int errorHash)
+        {
+            ErrorMessageMap.TryAdd(errorHash, message);
         }
 
         /// <summary>

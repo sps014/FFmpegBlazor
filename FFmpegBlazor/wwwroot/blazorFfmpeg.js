@@ -26,9 +26,18 @@ window.FfmpegBlazorReference = () => {
         {
             await ffmpegObjectInstances[hash].load();
         },
-        runFFmpeg: async (hash, params) =>
+        runFFmpeg: async (hash, params,errorHash, Dotnet) =>
         {
-            await ffmpegObjectInstances[hash].run(...params);
+            let res = null;
+            try {
+                await ffmpegObjectInstances[hash].run(...params);
+            }
+            catch (e) {
+                res = e.message;
+            }
+            finally {
+                Dotnet.invokeMethodAsync("runCompleted", res, errorHash);
+            }
         },
         readFileFFmpeg: async (obj) => {
             const h = Blazor.platform.readInt32Field(obj, 8);
