@@ -10,8 +10,8 @@ FFmpegBlazor provides ability to utilize ffmpeg.wasm from Blazor Wasm C#.\
 FFmpegBlazor integrates nicely with Blazor `InputFile` Component. Supports Lazy loading of ffmpeg binary. It is self hosted version one time download of core ffmpeg wasm lib will be 25Mb.
 
 #### Roadmap for .NET 8
-* Exploring to reduce extra configuration steps aka no longer need to add Wasm headers. 
-* Robust integration with .NET 8 wasm threads
+* Exploring to reduce extra configuration steps aka no longer need to add Wasm headers to run app locally. 
+* Robust integration with .NET 8 wasm threads and possibilty to use newer JSInterop API.
 
 ### Installation
 
