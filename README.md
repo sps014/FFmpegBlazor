@@ -6,7 +6,7 @@
  
 FFmpegBlazor provides ability to utilize ffmpeg.wasm from Blazor Wasm C#.\
 [ffmpeg.wasm](https://github.com/ffmpegwasm/ffmpeg.wasm) is a pure Webassembly / Javascript  port of FFmpeg. It enables video & audio record, convert and stream right inside browsers.\
-FFmpegBlazor integrates nicely with Blazor `InputFile` Component. Supports Lazy loading of ffmpeg binary. It is self hosted version one time download of core ffmpeg wasm lib will be 25Mb.
+Supports Lazy loading of ffmpeg binary. It is self hosted version one time download of core ffmpeg wasm lib will be 25Mb.
 
 ##### Video Tutorial : [Link](https://www.youtube.com/watch?v=5L4utDgFAAg) Credit Dev Express
 
@@ -22,7 +22,7 @@ dotnet add package FFmpegBlazor
 ```
 [API Documentation](https://github.com/sps014/FFmpegBlazor/wiki)
 
-### Running WASM App
+### Running WASM App 
 
 **Currently we need to use a workaround to run FFmpegApps on web assembly, this will be removed in .NET 7 (Early September 2022) once Multi threading support is available on WASM.**
 
