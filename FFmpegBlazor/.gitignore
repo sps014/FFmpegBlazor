@@ -36,6 +36,7 @@ bld/
 [Ll]ogs/
 
 wwwroot/js/_snowpack/
+wwwroot/js/index.js
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
