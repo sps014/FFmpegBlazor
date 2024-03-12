@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Condition="$(Configuration) == 'Debug'" Command="cd JS &amp;&amp; npm run snowpack-build" />
-    <Exec Condition="$(Configuration) == 'Release'" Command="cd JS &amp;&amp; npm run snowpack-build" />
+    <Exec Condition="$(Configuration) == 'Debug'" Command="cd JS &amp;&amp; npm run build" />
+    <Exec Condition="$(Configuration) == 'Release'" Command="cd JS &amp;&amp; npm run build" />
   </Target>
 
 </Project>

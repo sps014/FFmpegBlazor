@@ -1,5 +1,4 @@
 ﻿@page "/"
-@using FFmpegBlazor
 @inject IJSRuntime Runtime
 
 <MudCard Outlined="true">
@@ -16,8 +15,17 @@
     </MudCardContent>
     <MudCardActions>
         <a href="/tomp3">
-            <MudButton Variant="Variant.Text" Color="Color.Success">Online Convert to  Mp3 Sample </MudButton>
+            <MudButton Variant="Variant.Text" Color="Color.Success">Online Convert to Mp3 Sample </MudButton>
         </a>
     </MudCardActions>
 </MudCard>
 
+
+@code
+{
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("Def");
+        FFmpegBlazor.FFmpegFactory.Init(Runtime);
+    }
+}
