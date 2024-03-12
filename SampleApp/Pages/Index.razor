@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject IJSRuntime Runtime
+@using FFmpegBlazor
 
 <MudCard Outlined="true">
     <MudCardContent>
@@ -23,9 +24,9 @@
 
 @code
 {
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("Def");
-        FFmpegBlazor.FFmpegFactory.Init(Runtime);
+        var ffmpeg = await FFmpeg.CreateAsync(Runtime);
+        Console.WriteLine(await ffmpeg.Load());
     }
 }
