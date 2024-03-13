@@ -1,8 +1,7 @@
-import "@ffmpeg/ffmpeg";
-import "@ffmpeg/util";
 
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { toBlobURL } from "@ffmpeg/util";
+
 
 let ffmpegs = {}; ///unique id to ffmpeg object map
 

@@ -14,7 +14,7 @@ namespace FFmpegBlazor
     {
         public JObjPtr FFmpegPtr { get; }
 
-        const string baseURL = "https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm"; //manually control which version to ship with razor lib
+        const string baseURL = "https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd"; //manually control which version to ship with razor lib
 
 
         public bool Loaded
