@@ -1,31 +1,25 @@
+import "@ffmpeg/ffmpeg";
+import "@ffmpeg/util";
+
 import { FFmpeg } from "@ffmpeg/ffmpeg";
+import { toBlobURL } from "@ffmpeg/util";
 
 let ffmpegs = {}; ///unique id to ffmpeg object map
 
-export function createFFmpeg(hash) {
-  ffmpegs[hash] = new FFmpeg();
-}
+window.createFFmpeg = function () {
+  return new FFmpeg();
+};
 
-export function destroyFFmpeg(hash) {
-  delete ffmpegs[hash];
-}
+window.load = async function (ffmpeg, param) {
+  console.log(ffmpeg);
+  return await ffmpeg.load(param);
+};
 
-export function loaded(hash) {
-  return ffmpegs[hash].loaded;
-}
-
-export async function exec(hash, args, timeout = -1, _namedParameters = {}) {
-  await ffmpegs[hash].exec(args, timeout, _namedParameters);
-}
-
-export async function load(hash, dotnet) {
-    try {
-        console.log(hash);
-
-        let result = await ffmpegs[hash].load();
-        await dotnet.invokeMethodAsync("OnFFmpegLoaded", result, null);
-    }
-    catch (e) {
-        await dotnet.invokeMethodAsync("OnFFmpegLoaded", false, e.message);
-  }
-}
+window.toBlobURL = async function (
+  url,
+  mimetype,
+  progress = false,
+  callback = undefined
+) {
+  return await toBlobURL(url, mimetype, progress, callback);
+};

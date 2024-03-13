@@ -1,4 +1,6 @@
-﻿using Microsoft.JSInterop;
+﻿using BlazorBindGen;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Microsoft.JSInterop.Implementation;
 using System;
 using System.Collections.Generic;
@@ -10,65 +12,58 @@ namespace FFmpegBlazor
 {
     public class FFmpeg
     {
-        internal int Hash { get; }
+        public JObjPtr FFmpegPtr { get; }
 
-        private static int HashCount = 0;
+        const string baseURL = "https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm"; //manually control which version to ship with razor lib
 
-        private IJSInProcessObjectReference FFmpegObjectReference;
-        private DotNetObjectReference<FFmpeg> dotnetObjectReference;
 
         public bool Loaded
         {
             get
             {
-                return FFmpegObjectReference.Invoke<bool>("loaded", Hash);
+                return FFmpegPtr.PropVal<bool>("loaded");
             }
         }
 
-        private FFmpeg(int hash,IJSInProcessObjectReference jsObjectReference)
+        private FFmpeg(JObjPtr ffmpeg)
         {
-            Hash = hash;
-            FFmpegObjectReference = jsObjectReference;
-            dotnetObjectReference = DotNetObjectReference.Create(this);
-        }
-
-        ~FFmpeg()
-        {
-            FFmpegObjectReference.InvokeVoid("destroyFFmpeg", Hash);
-            FFmpegObjectReference.Dispose();
+            FFmpegPtr = ffmpeg;
         }
 
         public static async ValueTask<FFmpeg> CreateAsync(IJSRuntime runtime)
         {
-            var jsObjectReference = await runtime.InvokeAsync<IJSInProcessObjectReference>("import", "./_content/FFmpegBlazor/js/index.js");
-            var hash = HashCount++;
-            await jsObjectReference.InvokeVoidAsync("createFFmpeg", hash);
-            return new FFmpeg(hash,jsObjectReference);
+            await BindGen.InitAsync(runtime);
+            Util.Runtime = runtime;
+
+            await runtime.InvokeVoidAsync("import","./_content/FFmpegBlazor/js/index.js");
+            var ffmpeg = BindGen.Window.CallRef("createFFmpeg");
+            return new FFmpeg(ffmpeg);
         }
-
-
-        private SemaphoreSlim loaderSemaphore=new SemaphoreSlim(0,1);
-        private bool loadResult;
-        private string loadError;
-
-        public async ValueTask<bool> Load()
+        public async ValueTask<bool> LoadAsync(object? _nameParameters=null)
         {
-            await FFmpegObjectReference.InvokeVoidAsync("load", Hash,dotnetObjectReference);
-            await loaderSemaphore.WaitAsync();
-
-            if(!string.IsNullOrWhiteSpace(loadError))
-                throw new Exception(loadError);
-
-            return loadResult;
+            if(_nameParameters == null)
+            {
+                _nameParameters = new
+                {
+                    coreURL = await Util.ToBlobURL($"{baseURL}/ffmpeg-core.js", "text/javascript"),
+                    wasmURL = await Util.ToBlobURL($"{baseURL}/ffmpeg-core.wasm", "application/wasm"),
+                    workerURL= await Util.ToBlobURL($"{baseURL}/ffmpeg-core.worker.js","text/javascript"),
+                };
+            }
+            return await BindGen.Window.CallAwaitedAsync<bool>("load",FFmpegPtr, _nameParameters);
         }
-
-        [JSInvokable("OnFFmpegLoaded")]
-        public void OnFFmpegLoaded(bool result,string error)
+        public async ValueTask<int> ExecAsync(string[] args,int timeout=-1,object? _namedParameters=null)
         {
-            loadResult = result;
-            loadError = error;
-            //loaderSemaphore.Release();
+            if(_namedParameters == null)
+                return await FFmpegPtr.CallAwaitedAsync<int>("exec", args, timeout);
+
+            return await FFmpegPtr.CallAwaitedAsync<int>("exec",args,timeout,_namedParameters);
         }
-      
+
+        public ValueTask TerminateAsync()
+        {
+            return FFmpegPtr.CallVoidAsync("terminate");
+        }
+
     }
 }

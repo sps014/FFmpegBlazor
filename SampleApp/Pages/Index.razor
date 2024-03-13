@@ -21,12 +21,13 @@
     </MudCardActions>
 </MudCard>
 
-
 @code
 {
     protected override async Task OnInitializedAsync()
     {
         var ffmpeg = await FFmpeg.CreateAsync(Runtime);
-        Console.WriteLine(await ffmpeg.Load());
+        var re= await ffmpeg.LoadAsync();
+        Console.WriteLine(ffmpeg.Loaded);
+        Console.WriteLine("await ffmpeg.Load()");
     }
 }
