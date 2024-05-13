@@ -145,7 +145,7 @@ namespace FFmpegBlazor
         /// Progress Value between 0-1
         /// </summary>
         [JsonPropertyName("ratio")]
-        public double Ratio { get; init; }
+        public double? Ratio { get; init; }
     }
     public struct Logs
     {
