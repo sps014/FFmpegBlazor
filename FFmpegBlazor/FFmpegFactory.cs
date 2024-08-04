@@ -32,9 +32,9 @@ namespace FFmpegBlazor
                 throw new ArgumentNullException(paramName: nameof(runtime), message: "runtime parameter can't be null");
 
             //cdnURL ??= "https://unpkg.com/@ffmpeg/ffmpeg@0.10.0/dist/ffmpeg.min.js";
-            cdnURL = "./_content/FFmpegBlazor/0.10.0/ffmpeg.min.js";
+            cdnURL = "/_content/FFmpegBlazor/0.10.0/ffmpeg.min.js";
             await Runtime.InvokeVoidAsync("import", cdnURL);
-            await Runtime.InvokeVoidAsync("import", "./_content/FFmpegBlazor/blazorFfmpeg.js");
+            await Runtime.InvokeVoidAsync("import", "/_content/FFmpegBlazor/blazorFfmpeg.js");
 
 
             dotNetObjectReference = DotNetObjectReference.Create(new FFmpegFactory());
