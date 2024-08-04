@@ -10,9 +10,9 @@ Supports Lazy loading of ffmpeg binary. It is self hosted version one time downl
 
 ##### Video Tutorial : [Link](https://www.youtube.com/watch?v=5L4utDgFAAg) Credit Dev Express
 
-#### Roadmap for .NET 8
+#### Roadmap for .NET 9
 * Exploring to reduce extra configuration steps aka no longer need to add Wasm headers to run app locally. 
-* Robust integration with .NET 8 wasm threads and possibilty to use newer JSInterop API.
+* Robust integration with .NET 9 wasm threads and possibilty to use newer JSInterop API.
 
 ### Installation
 
@@ -24,7 +24,7 @@ dotnet add package FFmpegBlazor
 
 ### Running WASM App 
 
-**Currently we need to use a workaround to run FFmpegApps on web assembly, this will be removed in .NET 7 (Early September 2022) once Multi threading support is available on WASM.**
+**Currently we need to use a workaround to run FFmpegApps on web assembly, this will be removed in .NET 9 (Early September 2024) once Multi threading support is available on WASM.**
 
 We need to add 2 headers in Blazor WASM-local-server and in actual deployment static server also
 
