@@ -1,4 +1,4 @@
-# FFmpegBlazor
+# FFmpegBlazor (Blazor WASM)
 
 [![NuGet Badge](https://buildstats.info/nuget/FFmpegBlazor)](https://www.nuget.org/packages/FFmpegBlazor/)
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
