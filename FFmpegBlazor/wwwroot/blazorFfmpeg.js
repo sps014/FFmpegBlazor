@@ -1,8 +1,10 @@
 // This is a JavaScript module that is loaded on demand. It can export any number of
 // functions, and may import other JavaScript modules if required.
 
+
 window.ffmpegObjectInstances = new Object();
 window.readFileBuffers = new Object();
+
 
 window.FfmpegBlazorReference = () => {
     return {
@@ -39,25 +41,19 @@ window.FfmpegBlazorReference = () => {
                 Dotnet.invokeMethodAsync("runCompleted", res, errorHash);
             }
         },
-        readFileFFmpeg: async (obj) => {
-            const h = Blazor.platform.readInt32Field(obj, 8);
-            const p = Blazor.platform.readStringField(obj, 0);
-            readFileBuffers[h] = await ffmpegObjectInstances[h].FS('readFile', p);
-            return true; //Uint8Array array
+        readFileFFmpeg: async (hash,path) => {
+            readFileBuffers[hash] = await ffmpegObjectInstances[hash].FS('readFile', path);
         },
         readFileLength: (obj) => {
-            const h = Blazor.platform.readInt32Field(obj, 8);
+            const h = obj.Hash;
             return readFileBuffers[h].byteLength;
         },
         readFileProcess: (h)=>
         {
             return readFileBuffers[h];
         },
-        writeFileFFmpeg: async (obj, buffer)=>{
-            const contentArray = Blazor.platform.toUint8Array(buffer);
-            const h = Blazor.platform.readInt32Field(obj, 8);
-            const p = Blazor.platform.readStringField(obj, 0);
-            await ffmpegObjectInstances[h].FS("writeFile", p, contentArray);
+        writeFileFFmpeg: async (hash, path, buffer) => {
+            await ffmpegObjectInstances[hash].FS("writeFile", path, buffer);
 
         },
         unlinkFileFFmpeg: async (h, p) => {
@@ -80,12 +76,9 @@ window.FfmpegBlazorReference = () => {
             delete ffmpegObjectInstances[hash];
         },
         createObjectURL: (data,name,type) => {
-            const contentArray = Blazor.platform.toUint8Array(data);
-            const nameStr = BINDING.conv_string(name);
-            const contentTypeStr = BINDING.conv_string(type);
 
-            const file = new File([contentArray], nameStr, { type: contentTypeStr });
-            return BINDING.js_to_mono_obj(URL.createObjectURL(file));
+            const file = new File([data], name, { type: type });
+            return URL.createObjectURL(file);
         },
         revokeObjectURLCleanUp: (name) => {
             URL.revokeObjectURL(name);
@@ -94,11 +87,8 @@ window.FfmpegBlazorReference = () => {
             ffmpegObjectInstances[hash].exit();
         },
         downloadFile: (data, name, type) => {
-            const contentArray = Blazor.platform.toUint8Array(data);
-            const nameStr = BINDING.conv_string(name);
-            const contentTypeStr = BINDING.conv_string(type);
 
-            const file = new File([contentArray], nameStr, { type: contentTypeStr });
+            const file = new File([data], name, { type: type });
             const exportUrl = URL.createObjectURL(file);
 
             const a = document.createElement("a");

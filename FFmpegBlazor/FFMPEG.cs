@@ -15,7 +15,6 @@ namespace FFmpegBlazor
         public bool IsLoaded => IsLoadedFFmpeg();
 
         internal IJSRuntime Runtime;
-        internal IJSUnmarshalledObjectReference reference;
         internal IJSInProcessObjectReference processReference;
         internal int Hash;
         internal static int HashCount = 0;
@@ -70,15 +69,11 @@ namespace FFmpegBlazor
         /// <returns>byte[] reference</returns>
         public async Task<byte[]> ReadFile(string path)
         {
-            _ = reference.InvokeUnmarshalled<FileConf, bool>("readFileFFmpeg", new FileConf()
-            {
-                Hash = Hash,
-                Path = path
-            });
+            processReference.InvokeVoid("readFileFFmpeg",Hash,path);
           
             await Task.Delay(5);
            
-            var array =reference.Invoke<byte[]>("readFileProcess",Hash);
+            var array =processReference.Invoke<byte[]>("readFileProcess",Hash);
             return array;
         }
         /// <summary>
@@ -88,11 +83,7 @@ namespace FFmpegBlazor
         /// <param name="buffer">File bytes</param>
         public void WriteFile(string path, byte[] buffer)
         {
-            reference.InvokeUnmarshalled<FileConf, byte[], object>("writeFileFFmpeg", new FileConf()
-            {
-                Hash = Hash,
-                Path = path
-            }, buffer);
+            processReference.InvokeVoid("writeFileFFmpeg", Hash,path, buffer);
         }
         /// <summary>
         /// Delete In Memory Wasm file 
@@ -100,7 +91,7 @@ namespace FFmpegBlazor
         /// <param name="path">path to file to delete</param>
         public void UnlinkFile(string path)
         {
-            reference.InvokeVoid("unlinkFileFFmpeg", Hash, path);
+            processReference.InvokeVoid("unlinkFileFFmpeg", Hash, path);
         }
         /// <summary>
         /// Use fast ReadFile(), WriteFile() and UnlinkFile() , for other command use use this FS method directly.
@@ -111,15 +102,15 @@ namespace FFmpegBlazor
         /// <returns></returns>
         public async Task<T> FS<T>(string method, params object[] args)
         {
-            return await reference.InvokeAsync<T>("fsFFmpeg", method, args);
+            return await processReference.InvokeAsync<T>("fsFFmpeg", method, args);
         }
         public void Exit()
         {
-            reference.InvokeVoid("exitfs",Hash);
+            processReference.InvokeVoid("exitfs",Hash);
         }
         internal bool IsLoadedFFmpeg()
         {
-            return reference.Invoke<bool>("isLoadedFFmpeg", Hash);
+            return processReference.Invoke<bool>("isLoadedFFmpeg", Hash);
         }
         ~FFMPEG()
         {
@@ -166,12 +157,9 @@ namespace FFmpegBlazor
         /// </summary>
         public event ProgressHandler Progress;
 
-        [StructLayout(LayoutKind.Explicit)]
-        internal struct FileConf
+        internal class FileConf
         {
-            [FieldOffset(0)]
             public string Path;
-            [FieldOffset(8)]
             public int Hash;
         }
 

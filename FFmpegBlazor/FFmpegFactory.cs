@@ -14,7 +14,6 @@ namespace FFmpegBlazor
         /// </summary>
         public static IJSRuntime Runtime { get; private set; }
 
-        private static IJSUnmarshalledObjectReference reference;
         private static IJSInProcessObjectReference processReference;
         private static DotNetObjectReference<FFmpegFactory> dotNetObjectReference;
 
@@ -39,10 +38,6 @@ namespace FFmpegBlazor
 
             dotNetObjectReference = DotNetObjectReference.Create(new FFmpegFactory());
 
-            reference = ((IJSUnmarshalledRuntime)Runtime)
-                .InvokeUnmarshalled<IJSUnmarshalledObjectReference>("FfmpegBlazorReference");
-
-
             processReference = await ((IJSInProcessRuntime)Runtime)
                 .InvokeAsync<IJSInProcessObjectReference>("FfmpegBlazorReference");
         }
@@ -60,7 +55,6 @@ namespace FFmpegBlazor
             var ffObject = new FFMPEG(FFMPEG.HashCount)
             {
                 processReference = processReference,
-                reference = reference,
                 Runtime = Runtime
             };
 
@@ -77,7 +71,7 @@ namespace FFmpegBlazor
         /// <returns>ra URL Object</returns>
         public static string CreateURLFromBuffer(byte[] buffer, string name, string type)
         {
-            return reference.InvokeUnmarshalled<byte[], string, string, string>("createObjectURL", buffer, name, type);
+            return processReference.Invoke<string>("createObjectURL", buffer, name, type);
         }
         /// <summary>
         ///  Download  Buffer as File on client machine, instantly , without wait
@@ -87,7 +81,7 @@ namespace FFmpegBlazor
         /// <param name="type">Content Type eg. "video/mp4"</param>
         public static void DownloadBufferAsFile(byte[] buffer, string name, string type)
         {
-            reference.InvokeUnmarshalled<byte[], string, string, object>("downloadFile", buffer, name, type);
+            processReference.Invoke<object>("downloadFile", buffer, name, type);
         }
         /// <summary>
         /// Free URL object and buffer , caused by CreateURLFromBuffer()
@@ -95,7 +89,7 @@ namespace FFmpegBlazor
         /// <param name="blobURL">url to clean</param>
         public static void RevokeObjectURL(string blobURL)
         {
-            reference.InvokeVoid("revokeObjectURLCleanUp", blobURL);
+            processReference.InvokeVoid("revokeObjectURLCleanUp", blobURL);
         }
         /// <summary>
         /// This Method is not intented for External Use

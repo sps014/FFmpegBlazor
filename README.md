@@ -10,10 +10,6 @@ Supports Lazy loading of ffmpeg binary. It is self hosted version one time downl
 
 ##### Video Tutorial : [Link](https://www.youtube.com/watch?v=5L4utDgFAAg) Credit Dev Express
 
-#### Roadmap for .NET 9
-* Exploring to reduce extra configuration steps aka no longer need to add Wasm headers to run app locally. 
-* Robust integration with .NET 9 wasm threads and possibilty to use newer JSInterop API.
-
 ### Installation
 
 Download package via  [Nuget](https://www.nuget.org/packages/FFmpegBlazor/)  or DotNet CLI and you are good to go , no extra configuration required.
@@ -23,6 +19,9 @@ dotnet add package FFmpegBlazor
 [API Documentation](https://github.com/sps014/FFmpegBlazor/wiki)
 
 ### Running WASM App 
+
+
+#### Running Locally
 
 **Currently we need to use a workaround to run FFmpegApps on web assembly, this will be removed in .NET 9 (Early September 2024) once Multi threading support is available on WASM.**
 
@@ -51,6 +50,12 @@ Use [IIS Express](https://github.com/sps014/FFmpegBlazor/issues/9#issuecomment-1
 Also In actual deployment we need to add these 2 headers in server config to avoid `SharedArrayBuffer not defined` error.
 You can check Netlify deployment [sample here](https://github.com/sps014/ffmpegBlazor-Deployed).
 <br/>Thanks to [@aokocax](https://github.com/aokocax) for helping with it.
+
+
+#### Running Published
+
+Run following in published wwwroot folder with dotnet serve tool. 
+`dotnet serve -p 8000 -h "Cross-Origin-Embedder-Policy: require-corp" -h "Cross-Origin-Opener-Policy: same-origin"`
 
 ### Sample 
 Here is a sample page to convert mp4 to mp3 and play it in browser.
