@@ -71,7 +71,7 @@ namespace FFmpegBlazor
         {
             processReference.InvokeVoid("readFileFFmpeg",Hash,path);
           
-            await Task.Delay(5);
+            await Task.Delay(10);
            
             var array =processReference.Invoke<byte[]>("readFileProcess",Hash);
             return array;

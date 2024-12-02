@@ -54,9 +54,9 @@ window.FfmpegBlazorReference = () => {
         },
         writeFileFFmpeg: async (hash, path, buffer) => {
             await ffmpegObjectInstances[hash].FS("writeFile", path, buffer);
-
         },
         unlinkFileFFmpeg: async (h, p) => {
+            delete readFileBuffers[h];
             await ffmpegObjectInstances[h].FS('unlink', p);
         },
         fsFFmpeg: async (h, method, args) => {
