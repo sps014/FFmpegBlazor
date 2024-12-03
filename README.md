@@ -23,7 +23,7 @@ dotnet add package FFmpegBlazor
 
 #### Running Locally
 
-**Currently we need to use a workaround to run FFmpegApps on web assembly, this will be removed in .NET 9 (Early September 2024) once Multi threading support is available on WASM.**
+**Currently we need to use a workaround to run FFmpegApps on web assembly, this will be removed in .NET 10 (Early September 2025) once Multi threading support is available on WASM, and these headers are injected.**
 
 We need to add 2 headers in Blazor WASM-local-server and in actual deployment static server also
 
@@ -55,6 +55,7 @@ You can check Netlify deployment [sample here](https://github.com/sps014/ffmpegB
 #### Running Published
 
 Run following in published wwwroot folder with dotnet serve tool. 
+
 `dotnet serve -p 8000 -h "Cross-Origin-Embedder-Policy: require-corp" -h "Cross-Origin-Opener-Policy: same-origin"`
 
 ### Sample 
