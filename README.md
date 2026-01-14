@@ -23,7 +23,7 @@ dotnet add package FFmpegBlazor
 
 #### Running Locally
 
-**Currently we need to use a workaround to run FFmpegApps on web assembly, this will be removed in .NET 10 (Early September 2025) once Multi threading support is available on WASM, and these headers are injected.**
+**Currently we need to use a workaround to run FFmpegApps on web assembly, this will be removed in .NET 11 (Early September 2026) once Multi threading support is available on blazor WASM, and these headers are injected.**
 
 We need to add 2 headers in Blazor WASM-local-server and in actual deployment static server also
 
