@@ -12,14 +12,14 @@ window.FfmpegBlazorReference = () => {
             if (config.corePath == null)
                 ffmpegObjectInstances[hash] = FFmpeg.createFFmpeg({
                     log: config.log,
-                    logger: (message) => Dotnet.invokeMethodAsync("logger", message),
+                    logger: (log) => Dotnet.invokeMethodAsync("logger", log),
                     progress: (p) => Dotnet.invokeMethodAsync("progress", p)
             });
             else
                 ffmpegObjectInstances[hash] = FFmpeg.createFFmpeg({
                     corePath: config.corePath,
                     log: config.log,
-                    logger: (message) => Dotnet.invokeMethodAsync("logger", message),
+                    logger: (log) => Dotnet.invokeMethodAsync("logger", log),
                     progress: (p) => Dotnet.invokeMethodAsync("progress", p)
                 });
 
