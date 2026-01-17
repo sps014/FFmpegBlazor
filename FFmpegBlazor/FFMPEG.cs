@@ -127,12 +127,12 @@ namespace FFmpegBlazor
         /// <summary>
         /// This Method is not intented for External Use
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="log"></param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [JSInvokable("logger")]
-        public void ZLoggerCallback(Logs message)
+        public void ZLoggerCallback(Logs log)
         {
-            Logger?.Invoke(message);
+            Logger?.Invoke(log);
         }
 
         /// <summary>
