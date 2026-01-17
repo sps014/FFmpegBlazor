@@ -9,9 +9,9 @@
     <RepositoryUrl>https://github.com/sps014/FFmpegBlazor</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>sps014</Authors>
-    <AssemblyVersion>1.0.0.10</AssemblyVersion>
-    <FileVersion>1.0.0.10</FileVersion>
-    <Version>1.0.0.10</Version>
+    <AssemblyVersion>1.0.0.11</AssemblyVersion>
+    <FileVersion>1.0.0.11</FileVersion>
+    <Version>1.0.0.11</Version>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
